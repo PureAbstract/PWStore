@@ -12,14 +12,16 @@
 @interface PWStoreAppDelegate : NSObject <UIApplicationDelegate,
                                           UITabBarControllerDelegate,
                                           MasterPasswordViewControllerDelegate> {
-    UIWindow *window;
-    UINavigationController *navigationController;
-    UITabBarController *tabBarController;
+    UIWindow *window_;
+    UINavigationController *navigationController_;
+    UITabBarController *tabBarController_;
+    NSString *password_;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
+@property (nonatomic, copy) NSString *password;
 
 @end
 

@@ -10,20 +10,31 @@
 #import "RootViewController.h"
 #import "MasterPasswordViewController.h"
 
+enum {
+    kLockController = 1041,
+};
+
 @implementation PWStoreAppDelegate
 
-@synthesize window;
-@synthesize navigationController;
-@synthesize tabBarController;
+@synthesize window = window_;
+@synthesize navigationController = navigationController_;
+@synthesize tabBarController = tabBarController_;
+@synthesize password = password_;
 
 #pragma mark -
 #pragma mark Master Password
--(void)showMasterPasswordController
+-(void)showMasterPasswordControllerAnimated:(BOOL)animated
 {
+    self.password = nil;
     MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
     mpv.delegate = self;
-    [self.tabBarController presentModalViewController:mpv animated:NO];
+    [self.tabBarController presentModalViewController:mpv animated:animated];
     [mpv release];
+}
+
+-(void)showMasterPasswordController
+{
+    [self showMasterPasswordControllerAnimated:NO];
 }
 
 #pragma mark -
@@ -31,8 +42,13 @@
 -(BOOL)masterPasswordViewShouldClose:(MasterPasswordViewController *)controller
 {
     //    NSAssert( self.tabBarController.modalView == contoller, @"Not the modal controller" );
-    [self.tabBarController dismissModalViewControllerAnimated:YES];
-    return YES;
+    if( controller.passwordText.length > 0 ) {
+        self.password = controller.passwordText;
+        [self.tabBarController dismissModalViewControllerAnimated:YES];
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 
@@ -49,7 +65,7 @@
     //[tabBarControllers addObject:navigationController];
     {
         RootViewController *c = [[RootViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"Home"
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Data",nil)
                                                            image:nil
                                                              tag:0];
         c.tabBarItem = item;
@@ -59,7 +75,18 @@
     }
     {
         UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"Away"
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Sync",nil)
+                                                           image:nil
+                                                             tag:0];
+        c.tabBarItem = item;
+        [tabBarControllers addObject:c];
+        [item release];
+        [c release];
+    }
+    {
+        // This is a dummy view...
+        UIViewController *c = [UIViewController new];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Lock",nil)
                                                            image:nil
                                                              tag:0];
         c.tabBarItem = item;
@@ -68,10 +95,10 @@
         [c release];
     }
 
-    tabBarController.viewControllers = tabBarControllers;
+    tabBarController_.viewControllers = tabBarControllers;
 
     // Add the navigation controller's view to the window and display.
-    [self.window addSubview:tabBarController.view];
+    [self.window addSubview:tabBarController_.view];
     //[self.window addSubview:navigationController.view];
     [self.window makeKeyAndVisible];
 
@@ -117,6 +144,18 @@
      */
 }
 
+#pragma mark -
+#pragma mark UITabBarController Delegate
+- (BOOL)tabBarController:(UITabBarController *)tabBarController
+         shouldSelectViewController:(UIViewController *)viewController
+{
+    if( [UIViewController class] == [viewController class] ) {
+        [self showMasterPasswordControllerAnimated:YES];
+        return NO;
+    }
+    return YES;
+}
+
 
 #pragma mark -
 #pragma mark Memory management
@@ -129,9 +168,10 @@
 
 
 - (void)dealloc {
-    [tabBarController release];
-    [navigationController release];
-    [window release];
+    [tabBarController_ release];
+    [navigationController_ release];
+    [window_ release];
+    [password_ release];
     [super dealloc];
 }
 

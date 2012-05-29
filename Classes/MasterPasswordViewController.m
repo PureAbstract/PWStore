@@ -26,6 +26,7 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
+    NSAssert( delegate_, @"Did you forget the delegate?" );
     [super viewDidLoad];
     [passwordField_ becomeFirstResponder];
 }
@@ -42,7 +43,7 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
+
     // Release any cached data, images, etc. that aren't in use.
 }
 
@@ -67,17 +68,24 @@
 {
     NSAssert( textField == passwordField_, @"Unexpected sender" );
     if( textField.text.length > 0 ) {
-        [textField resignFirstResponder];
         if( delegate_ ) {
-            return [delegate_ masterPasswordViewShouldClose:self];
+            if( [delegate_ masterPasswordViewShouldClose:self] ) {
+                [textField resignFirstResponder];
+                return YES;
+            }
         }
-        return YES;
-    } else {
-        return NO;
     }
+    return NO;
 }
 
 
 #pragma mark -
+-(NSString *)passwordText
+{
+    NSAssert( passwordField_, @"Null field" );
+    NSAssert( passwordField_.text, @"Null text" );
+    return passwordField_.text;
+}
+
 
 @end
