@@ -42,14 +42,14 @@ enum {
 -(id)init {
     self = [super init];
     if( self ) {
-        title_ = [NSString string];
-        login_ = [NSString string];
-        password_ = [NSString string];
-        url_ = [NSString string];
-        email_ = [NSString string];
-        notes_ = [NSString string];
-        created_ = [NSDate date];
-        updated_ = [NSDate date];
+        self.title = [NSString string];
+        self.login = [NSString string];
+        self.password = [NSString string];
+        self.url = [NSString string];
+        self.email = [NSString string];
+        self.notes = [NSString string];
+        self.created = [NSDate date];
+        self.updated = [NSDate date];
     }
     return self;
 }
