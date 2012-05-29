@@ -63,6 +63,8 @@ enum {
     // Add views to tab bar
     NSMutableArray *tabBarControllers = [NSMutableArray arrayWithCapacity:4];
     //[tabBarControllers addObject:navigationController];
+
+    // These are just here for examples...
     {
         RootViewController *c = [[RootViewController alloc] initWithStyle:UITableViewStyleGrouped];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Data",nil)
@@ -88,7 +90,7 @@ enum {
         UIViewController *c = [UIViewController new];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Lock",nil)
                                                            image:nil
-                                                             tag:0];
+                                                             tag:kLockController];
         c.tabBarItem = item;
         [tabBarControllers addObject:c];
         [item release];
