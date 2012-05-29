@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface PWItem : NSObject<NSCoding> {
+    // Note: It may be a better plan to store these as an array,
+    // with specified indices.
     NSString *title_;
     NSString *login_;
     NSString *password_;
