@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PWStoreAppDelegate : NSObject <UIApplicationDelegate> {
-    
+
     UIWindow *window;
     UINavigationController *navigationController;
 }
