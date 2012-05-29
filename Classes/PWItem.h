@@ -25,6 +25,6 @@
 @property (nonatomic,copy) NSString *url;
 @property (nonatomic,copy) NSString *email;
 @property (nonatomic,copy) NSString *notes;
-@property (nonatomic,retain) NSData *created;
-@property (nonatomic,retain) NSData *updated;
+@property (nonatomic,retain) NSDate *created;
+@property (nonatomic,retain) NSDate *updated;
 @end
