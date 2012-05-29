@@ -8,12 +8,32 @@
 
 #import "PWStoreAppDelegate.h"
 #import "RootViewController.h"
-
+#import "MasterPasswordViewController.h"
 
 @implementation PWStoreAppDelegate
 
 @synthesize window;
 @synthesize navigationController;
+@synthesize tabBarController;
+
+#pragma mark -
+#pragma mark Master Password
+-(void)showMasterPasswordController
+{
+    MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
+    mpv.delegate = self;
+    [self.tabBarController presentModalViewController:mpv animated:NO];
+    [mpv release];
+}
+
+#pragma mark -
+#pragma mark MasterPasswordViewControllerDelegate
+-(BOOL)masterPasswordViewShouldClose:(MasterPasswordViewController *)controller
+{
+    //    NSAssert( self.tabBarController.modalView == contoller, @"Not the modal controller" );
+    [self.tabBarController dismissModalViewControllerAnimated:YES];
+    return YES;
+}
 
 
 #pragma mark -
@@ -23,10 +43,39 @@
 
     // Override point for customization after application launch.
 
+
+    // Add views to tab bar
+    NSMutableArray *tabBarControllers = [NSMutableArray arrayWithCapacity:4];
+    //[tabBarControllers addObject:navigationController];
+    {
+        RootViewController *c = [[RootViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"Home"
+                                                           image:nil
+                                                             tag:0];
+        c.tabBarItem = item;
+        [tabBarControllers addObject:c];
+        [item release];
+        [c release];
+    }
+    {
+        UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"Away"
+                                                           image:nil
+                                                             tag:0];
+        c.tabBarItem = item;
+        [tabBarControllers addObject:c];
+        [item release];
+        [c release];
+    }
+
+    tabBarController.viewControllers = tabBarControllers;
+
     // Add the navigation controller's view to the window and display.
-    [self.window addSubview:navigationController.view];
+    [self.window addSubview:tabBarController.view];
+    //[self.window addSubview:navigationController.view];
     [self.window makeKeyAndVisible];
 
+    [self showMasterPasswordController];
     return YES;
 }
 
@@ -80,6 +129,7 @@
 
 
 - (void)dealloc {
+    [tabBarController release];
     [navigationController release];
     [window release];
     [super dealloc];
