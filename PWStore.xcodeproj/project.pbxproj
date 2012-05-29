@@ -13,6 +13,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
+		E384DD6B157582C400A90DDA /* NSCoder+withDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */; };
 		E38E44FE1575518C00FB0AF6 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E44FD1575518C00FB0AF6 /* NSData+AES.m */; };
 		E38E45341575592100FB0AF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E45331575592100FB0AF6 /* Security.framework */; };
 		E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E45C315755B8F00FB0AF6 /* PWItem.m */; };
@@ -34,6 +35,8 @@
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* PWStore-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PWStore-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCoder+withDefaults.h"; sourceTree = "<group>"; };
+		E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCoder+withDefaults.m"; sourceTree = "<group>"; };
 		E38E44FC1575518C00FB0AF6 /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
 		E38E44FD1575518C00FB0AF6 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
 		E38E45331575592100FB0AF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -74,6 +77,8 @@
 				E38E45C315755B8F00FB0AF6 /* PWItem.m */,
 				E38E466B1575674600FB0AF6 /* MasterPasswordViewController.h */,
 				E38E466C1575674600FB0AF6 /* MasterPasswordViewController.m */,
+				E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */,
+				E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 				E38E44FE1575518C00FB0AF6 /* NSData+AES.m in Sources */,
 				E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */,
 				E38E466E1575674600FB0AF6 /* MasterPasswordViewController.m in Sources */,
+				E384DD6B157582C400A90DDA /* NSCoder+withDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
