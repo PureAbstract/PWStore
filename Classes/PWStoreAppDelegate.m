@@ -9,8 +9,10 @@
 #import "PWStoreAppDelegate.h"
 #import "RootViewController.h"
 #import "MasterPasswordViewController.h"
-
+#import "PWItem.h"
+#import "NSData+AES.h"
 enum {
+
     kLockController = 1041,
 };
 
@@ -20,12 +22,15 @@ enum {
 @synthesize navigationController = navigationController_;
 @synthesize tabBarController = tabBarController_;
 @synthesize password = password_;
+@synthesize pwitems = pwitems_;
+
 
 #pragma mark -
 #pragma mark Master Password
 -(void)showMasterPasswordControllerAnimated:(BOOL)animated
 {
     self.password = nil;
+    self.pwitems = [NSMutableArray arrayWithCapacity:0];
     MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
     mpv.delegate = self;
     [self.tabBarController presentModalViewController:mpv animated:animated];
@@ -38,6 +43,61 @@ enum {
 }
 
 #pragma mark -
+#pragma mark Test data
+-(NSString *)documentFolder
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    return [paths objectAtIndex:0];
+}
+
+-(NSString *)defaultFile
+{
+    return [[self documentFolder] stringByAppendingPathComponent:@"default.dat"];
+}
+
+-(void)saveData
+{
+    NSData *key = [NSMutableData dataWithLength:32];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pwitems_];
+    NSData *enc = [data encryptWithKey:key
+                            saltLength:16];
+    NSAssert( enc, @"Encryption problem" );
+    // Verify...
+    NSData *dec = [enc decryptWithKey:key
+                           saltLength:16];
+    NSAssert( dec, @"Decryption problem" );
+    NSAssert( [dec isEqualToData:data], @"Encryption mismatch" );
+
+    NSError *error = nil;
+    [enc writeToFile:[self defaultFile]
+             options:(NSDataWritingAtomic|NSDataWritingFileProtectionComplete)
+               error:&error];
+    if( error ) {
+    }
+    NSData *load = [NSData dataWithContentsOfFile:[self defaultFile]];
+    NSAssert( load, @"Load error");
+    NSAssert( [load isEqualToData:enc], @"Load mismatch" );
+    NSData *ldec = [enc decryptWithKey:key
+                           saltLength:16];
+    NSAssert( [ldec isEqualToData:data], @"Decrypt mismatch" );
+}
+
+-(NSMutableArray *)getData
+{
+    // Hack: Data for testing
+    PWItem *pw = [PWItem new];
+    pw.title = @"Title";
+    pw.login = @"Login";
+    pw.password = @"Password";
+    pw.url = @"URL";
+    pw.email = @"git@pureabstract.org";
+    pw.notes = @"Notes and \n more notes";
+    NSMutableArray *arr = [NSMutableArray arrayWithObject:pw];
+    [pw release];
+    return arr;
+}
+
+#pragma mark -
 #pragma mark MasterPasswordViewControllerDelegate
 -(BOOL)masterPasswordViewShouldClose:(MasterPasswordViewController *)controller
 {
@@ -45,6 +105,7 @@ enum {
     if( controller.passwordText.length > 0 ) {
         self.password = controller.passwordText;
         [self.tabBarController dismissModalViewControllerAnimated:YES];
+        self.pwitems = [self getData];
         return YES;
     } else {
         return NO;
@@ -78,7 +139,7 @@ enum {
     {
         UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Sync",nil)
-                                                           image:nil
+                                                           image:[UIImage imageNamed:@"get.png"]
                                                              tag:0];
         c.tabBarItem = item;
         [tabBarControllers addObject:c];
@@ -89,7 +150,7 @@ enum {
         // This is a dummy view...
         UIViewController *c = [UIViewController new];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Lock",nil)
-                                                           image:nil
+                                                           image:[UIImage imageNamed:@"lock32.png"]
                                                              tag:kLockController];
         c.tabBarItem = item;
         [tabBarControllers addObject:c];
@@ -103,7 +164,7 @@ enum {
     [self.window addSubview:tabBarController_.view];
     //[self.window addSubview:navigationController.view];
     [self.window makeKeyAndVisible];
-
+    self.pwitems = [NSMutableArray arrayWithCapacity:0];
     [self showMasterPasswordController];
     return YES;
 }
@@ -174,6 +235,7 @@ enum {
     [navigationController_ release];
     [window_ release];
     [password_ release];
+    [pwitems_ release];
     [super dealloc];
 }
 

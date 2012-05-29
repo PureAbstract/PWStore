@@ -16,12 +16,13 @@
     UINavigationController *navigationController_;
     UITabBarController *tabBarController_;
     NSString *password_;
+    NSMutableArray *pwitems_; // Array of PWItem
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, copy) NSString *password;
-
+@property (nonatomic, retain) NSMutableArray *pwitems;
 @end
 
