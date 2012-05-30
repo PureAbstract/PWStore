@@ -80,12 +80,16 @@
 -(NSMutableData *)decryptWithKey:(NSData *)key saltLength:(size_t)saltLength
 {
     NSMutableData *decrypted = [self decryptWithKey:key];
-    if( saltLength > decrypted.length ) {
-        NSAssert( decrypted.length >= saltLength, @"Not enough data" );
-        return nil;
-    }
-    if( saltLength > 0 ) {
-        decrypted.length -= saltLength;
+    if( decrypted ) {
+        if( saltLength > decrypted.length ) {
+            NSAssert( decrypted.length >= saltLength, @"Not enough data" );
+            return nil;
+        }
+        if( saltLength > 0 ) {
+            decrypted.length -= saltLength;
+        }
+    } else {
+        NSLog(@"decryptWithKey: Decryption failted");
     }
     return decrypted;
 }
