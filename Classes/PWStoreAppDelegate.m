@@ -15,6 +15,7 @@
 #import "NSData+AES.h"
 #import "UIApplication+Utility.h"
 #import "NSString+Utility.h"
+#import "UIViewController+TabBarItem.h"
 
 enum {
     kSaltLength = 16,
@@ -142,9 +143,11 @@ enum {
 {
     NSMutableArray *data = [self loadData];
     if( data ) {
+        // Debug
         for( NSObject *obj in data ) {
             NSAssert( [obj isKindOfClass:[PWItem class]], @"Not a PWItem?" );
         }
+        // End Debug
         return data;
     }
     // Hack: Data for testing
@@ -212,19 +215,6 @@ enum {
 #pragma mark -
 #pragma mark Application lifecycle
 
--(void)setController:(UIViewController *)controller
- tabBarItemWithTitle:(NSString *)title
-               image:(NSString *)imageName
-                 tag:(NSInteger)tag
-{
-    UIImage *image = ( imageName ) ? [UIImage imageNamed:imageName] : nil;
-    UITabBarItem *button = [[UITabBarItem alloc] initWithTitle:title
-                                                         image:image
-                                                           tag:tag];
-    controller.tabBarItem = button;
-    [button release];
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     // Override point for customization after application launch.
@@ -239,29 +229,26 @@ enum {
     {
         UIViewController *controller = self.navigationController;
         controller.title = NSLocalizedString(@"Data",nil);
-        [self setController:controller
-              tabBarItemWithTitle:NSLocalizedString(@"Data",nil)
-                      image:@"icon_safe.png"
-                        tag:0];
+        [controller setTabBarItemWithTitle:NSLocalizedString(@"Data",nil)
+                                 imageName:@"icon_safe.png"
+                                       tag:0];
         [tabBarControllers addObject:controller];
     }
     {
         SyncViewController *controller = [[SyncViewController alloc] initWithStyle:UITableViewStyleGrouped];
         controller.title = NSLocalizedString(@"Sync",nil);
-        [self setController:controller
-              tabBarItemWithTitle:NSLocalizedString(@"Sync",nil)
-                      image:@"icon_refresh.png"
-                        tag:0];
+        [controller setTabBarItemWithTitle:NSLocalizedString(@"Sync",nil)
+                                     imageName:@"icon_refresh.png"
+                                       tag:0];
         [tabBarControllers addObject:controller];
         [controller release];
     }
     {
         SettingsViewController *controller = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         controller.title = NSLocalizedString(@"Settings",nil);
-        [self setController:controller
-              tabBarItemWithTitle:NSLocalizedString(@"Settings",nil)
-                      image:@"icon_settings.png"
-                        tag:0];
+        [controller setTabBarItemWithTitle:NSLocalizedString(@"Settings",nil)
+                                     imageName:@"icon_settings.png"
+                                       tag:0];
         [tabBarControllers addObject:controller];
         [controller release];
     }
@@ -270,10 +257,9 @@ enum {
         // The UITabBarControllerDelegate:shouldSelectViewController detects it,
         // and the puts up the lock screen.
         UIViewController *c = [UIViewController new];
-        [self setController:c
-              tabBarItemWithTitle:NSLocalizedString(@"Lock",nil)
-                      image:@"icon_lock.png"
-                        tag:kLockController];
+        [c setTabBarItemWithTitle:NSLocalizedString(@"Lock",nil)
+                        imageName:@"icon_lock.png"
+                              tag:kLockController];
         [tabBarControllers addObject:c];
         [c release];
     }

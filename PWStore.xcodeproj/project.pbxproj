@@ -22,6 +22,7 @@
 		E384DF2815759C3500A90DDA /* SyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E384DF2715759C3500A90DDA /* SyncViewController.m */; };
 		E384E01A1575A94B00A90DDA /* UIApplication+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E0191575A94B00A90DDA /* UIApplication+Utility.m */; };
 		E384E0671575B15900A90DDA /* NSString+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E0661575B15900A90DDA /* NSString+Utility.m */; };
+		E384E10D1576B27100A90DDA /* UIViewController+TabBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E10C1576B27100A90DDA /* UIViewController+TabBarItem.m */; };
 		E38E44FE1575518C00FB0AF6 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E44FD1575518C00FB0AF6 /* NSData+AES.m */; };
 		E38E45341575592100FB0AF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E45331575592100FB0AF6 /* Security.framework */; };
 		E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E45C315755B8F00FB0AF6 /* PWItem.m */; };
@@ -57,6 +58,8 @@
 		E384E0191575A94B00A90DDA /* UIApplication+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+Utility.m"; sourceTree = "<group>"; };
 		E384E0651575B15900A90DDA /* NSString+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utility.h"; sourceTree = "<group>"; };
 		E384E0661575B15900A90DDA /* NSString+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utility.m"; sourceTree = "<group>"; };
+		E384E10B1576B27100A90DDA /* UIViewController+TabBarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TabBarItem.h"; sourceTree = "<group>"; };
+		E384E10C1576B27100A90DDA /* UIViewController+TabBarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TabBarItem.m"; sourceTree = "<group>"; };
 		E38E44FC1575518C00FB0AF6 /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
 		E38E44FD1575518C00FB0AF6 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
 		E38E45331575592100FB0AF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -107,6 +110,8 @@
 				E384E0191575A94B00A90DDA /* UIApplication+Utility.m */,
 				E384E0651575B15900A90DDA /* NSString+Utility.h */,
 				E384E0661575B15900A90DDA /* NSString+Utility.m */,
+				E384E10B1576B27100A90DDA /* UIViewController+TabBarItem.h */,
+				E384E10C1576B27100A90DDA /* UIViewController+TabBarItem.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 				E384DF2815759C3500A90DDA /* SyncViewController.m in Sources */,
 				E384E01A1575A94B00A90DDA /* UIApplication+Utility.m in Sources */,
 				E384E0671575B15900A90DDA /* NSString+Utility.m in Sources */,
+				E384E10D1576B27100A90DDA /* UIViewController+TabBarItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
