@@ -11,15 +11,30 @@
 #import <CommonCrypto/CommonDigest.h>
 
 @implementation NSData (AES)
+-(NSData *)sha256
+{
+    NSMutableData *hash = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256( self.bytes, self.length, hash.mutableBytes );
+    return hash;
+}
+
++(NSData *)randomBytes:(size_t)length
+{
+    NSMutableData *bytes = [NSMutableData dataWithLength:length];
+    if( length > 0 ) {
+        SecRandomCopyBytes( kSecRandomDefault, length, bytes.mutableBytes );
+    }
+    return bytes;
+}
+
+
 -(NSMutableData *)cryptOperation:(CCOperation) operation
                          withKey:(NSData *)key
 {
     if( key.length != kCCKeySizeAES256 ) {
         // Key the wrong size, go hash with SHA256...
-        NSAssert( CC_SHA256_DIGEST_LENGTH >= kCCKeySizeAES256, @"This is odd...");
-        u_int8_t hash[CC_SHA256_DIGEST_LENGTH];
-        CC_SHA256( key.bytes, key.length, hash );
-        key = [NSData dataWithBytes:hash length:kCCKeySizeAES256];
+        NSAssert( CC_SHA256_DIGEST_LENGTH == kCCKeySizeAES256, @"This is odd...");
+        key = [key sha256];
     }
     NSAssert( key.length == kCCKeySizeAES256, @"Bad key size" );
 
@@ -69,10 +84,7 @@
     }
     NSMutableData *buf = [NSMutableData dataWithCapacity:self.length + saltLength];
     [buf appendData:self];
-    uint8_t *salt = (uint8_t *)malloc( saltLength );
-    SecRandomCopyBytes( kSecRandomDefault, saltLength, salt );
-    [buf appendBytes:salt length:saltLength];
-    free( salt );
+    [buf appendData:[NSData randomBytes:saltLength]];
     return [buf encryptWithKey:key];
 }
 
