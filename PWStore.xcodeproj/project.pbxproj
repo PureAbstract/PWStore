@@ -18,6 +18,8 @@
 		E384DEE71575990400A90DDA /* icon_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE31575990400A90DDA /* icon_refresh.png */; };
 		E384DEE81575990400A90DDA /* icon_safe.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE41575990400A90DDA /* icon_safe.png */; };
 		E384DEE91575990400A90DDA /* icon_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE51575990400A90DDA /* icon_settings.png */; };
+		E384DF0815759B7200A90DDA /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E384DF0715759B7200A90DDA /* SettingsViewController.m */; };
+		E384DF2815759C3500A90DDA /* SyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E384DF2715759C3500A90DDA /* SyncViewController.m */; };
 		E38E44FE1575518C00FB0AF6 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E44FD1575518C00FB0AF6 /* NSData+AES.m */; };
 		E38E45341575592100FB0AF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E45331575592100FB0AF6 /* Security.framework */; };
 		E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E45C315755B8F00FB0AF6 /* PWItem.m */; };
@@ -45,6 +47,10 @@
 		E384DEE31575990400A90DDA /* icon_refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_refresh.png; path = Resources/icon_refresh.png; sourceTree = "<group>"; };
 		E384DEE41575990400A90DDA /* icon_safe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_safe.png; path = Resources/icon_safe.png; sourceTree = "<group>"; };
 		E384DEE51575990400A90DDA /* icon_settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_settings.png; path = Resources/icon_settings.png; sourceTree = "<group>"; };
+		E384DF0615759B7200A90DDA /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		E384DF0715759B7200A90DDA /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		E384DF2615759C3500A90DDA /* SyncViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncViewController.h; sourceTree = "<group>"; };
+		E384DF2715759C3500A90DDA /* SyncViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncViewController.m; sourceTree = "<group>"; };
 		E38E44FC1575518C00FB0AF6 /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
 		E38E44FD1575518C00FB0AF6 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
 		E38E45331575592100FB0AF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -87,6 +93,10 @@
 				E38E466C1575674600FB0AF6 /* MasterPasswordViewController.m */,
 				E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */,
 				E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */,
+				E384DF0615759B7200A90DDA /* SettingsViewController.h */,
+				E384DF0715759B7200A90DDA /* SettingsViewController.m */,
+				E384DF2615759C3500A90DDA /* SyncViewController.h */,
+				E384DF2715759C3500A90DDA /* SyncViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -220,6 +230,8 @@
 				E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */,
 				E38E466E1575674600FB0AF6 /* MasterPasswordViewController.m in Sources */,
 				E384DD6B157582C400A90DDA /* NSCoder+withDefaults.m in Sources */,
+				E384DF0815759B7200A90DDA /* SettingsViewController.m in Sources */,
+				E384DF2815759C3500A90DDA /* SyncViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

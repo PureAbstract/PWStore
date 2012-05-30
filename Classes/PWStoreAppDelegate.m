@@ -9,6 +9,8 @@
 #import "PWStoreAppDelegate.h"
 #import "RootViewController.h"
 #import "MasterPasswordViewController.h"
+#import "SettingsViewController.h"
+#import "SyncViewController.h"
 #import "PWItem.h"
 #import "NSData+AES.h"
 enum {
@@ -142,6 +144,19 @@ enum {
 #pragma mark -
 #pragma mark Application lifecycle
 
+-(void)setController:(UIViewController *)controller
+ tabBarItemWithTitle:(NSString *)title
+               image:(NSString *)imageName
+                 tag:(NSInteger)tag
+{
+    UIImage *image = ( imageName ) ? [UIImage imageNamed:imageName] : nil;
+    UITabBarItem *button = [[UITabBarItem alloc] initWithTitle:title
+                                                         image:image
+                                                           tag:tag];
+    controller.tabBarItem = button;
+    [button release];    
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     // Override point for customization after application launch.
@@ -154,44 +169,42 @@ enum {
     // NOTE: iPhone 3 size is 30x30, Retina is 60x60
     // These are just here for examples...
     {
-        RootViewController *c = [[RootViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Data",nil)
-                                                           image:[UIImage imageNamed:@"icon_safe.png"]
-                                                             tag:0];
-        c.tabBarItem = item;
-        [tabBarControllers addObject:c];
-        [item release];
-        [c release];
+        UIViewController *controller = self.navigationController;
+        controller.title = NSLocalizedString(@"Data",nil);
+        [self setController:controller
+              tabBarItemWithTitle:NSLocalizedString(@"Data",nil)
+                      image:@"icon_safe.png"
+                        tag:0];
+        [tabBarControllers addObject:controller];
     }
     {
-        UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Sync",nil)
-                                                           image:[UIImage imageNamed:@"icon_refresh.png"]
-                                                             tag:0];
-        c.tabBarItem = item;
-        [tabBarControllers addObject:c];
-        [item release];
-        [c release];
+        SyncViewController *controller = [[SyncViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        controller.title = NSLocalizedString(@"Sync",nil);
+        [self setController:controller
+              tabBarItemWithTitle:NSLocalizedString(@"Sync",nil)
+                      image:@"icon_refresh.png"
+                        tag:0];
+        [tabBarControllers addObject:controller];
+        [controller release];
     }
     {
-        UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings",nil)
-                                                           image:[UIImage imageNamed:@"icon_settings.png"]
-                                                             tag:0];
-        c.tabBarItem = item;
-        [tabBarControllers addObject:c];
-        [item release];
-        [c release];
+        SettingsViewController *controller = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        controller.title = NSLocalizedString(@"Settings",nil);
+        [self setController:controller
+              tabBarItemWithTitle:NSLocalizedString(@"Settings",nil)
+                      image:@"icon_settings.png"
+                        tag:0];
+        [tabBarControllers addObject:controller];
+        [controller release];
     }
     {
         // This is a dummy view...
         UIViewController *c = [UIViewController new];
-        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Lock",nil)
-                                                           image:[UIImage imageNamed:@"icon_lock.png"]
-                                                             tag:kLockController];
-        c.tabBarItem = item;
+        [self setController:c
+              tabBarItemWithTitle:NSLocalizedString(@"Lock",nil)
+                      image:@"icon_lock.png"
+                        tag:kLockController];
         [tabBarControllers addObject:c];
-        [item release];
         [c release];
     }
 
