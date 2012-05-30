@@ -62,9 +62,8 @@ enum {
     return [UIApplication documentPath:@"default.dat"];
 }
 
--(void)saveData
+-(void)saveDataInFile:(NSString *)filename
 {
-    NSString *filename = [self defaultFile];
     NSData *key = [self encryptionKey];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pwitems_];
     NSData *enc = [data encryptWithKey:key
@@ -95,9 +94,14 @@ enum {
     // END VERIFY
 }
 
--(NSMutableArray *)loadData
+-(void)saveData
 {
     NSString *filename = [self defaultFile];
+    return [self saveDataInFile:filename];
+}
+
+-(NSMutableArray *)loadDataFromFile:(NSString *)filename
+{
     if( ![[NSFileManager defaultManager] fileExistsAtPath:filename] ) {
         NSLog(@"File not found %@",filename);
         return nil;
@@ -126,6 +130,12 @@ enum {
     }
     NSLog(@"Unexpected object type %@",obj);
     return nil;
+}
+
+-(NSMutableArray *)loadData
+{
+    NSString *filename = [self defaultFile];
+    return[self loadDataFromFile:filename];
 }
 
 -(NSMutableArray *)getData
