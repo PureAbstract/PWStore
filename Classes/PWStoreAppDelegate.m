@@ -152,6 +152,35 @@ enum {
 
 #pragma mark -
 #pragma mark MasterPasswordViewControllerDelegate
+-(BOOL)checkMasterPassword:(NSString *)check
+{
+    static NSString * const kKeyHash = @"pwhash";
+    static NSString * const kKeySalt = @"pwsalt";
+    // NOTE - this is TOTALLY BOGUS
+    // We're saving an SHA256 hash of the master pw in the user defaults.
+    // That isn't a good idea - but will sort of do for now.
+    NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:kKeyHash];
+    NSData *savedsalt = [[NSUserDefaults standardUserDefaults] dataForKey:kKeySalt];
+    NSData *pwdata = [check asDataUTF8];
+    if( savedhash && savedsalt ) {
+        NSMutableData *buffer= [NSMutableData dataWithCapacity:pwdata.length+savedsalt.length];
+        [buffer appendData:pwdata];
+        [buffer appendData:savedsalt];
+        NSData *pwhash = [buffer sha256];
+        return [pwhash isEqualToData:savedhash];
+    } else {
+        savedsalt = [NSData randomBytes:kSaltLength];
+        NSMutableData *buffer = [NSMutableData dataWithCapacity:pwdata.length+savedsalt.length];
+        [buffer appendData:pwdata];
+        [buffer appendData:savedsalt];
+        NSData *pwhash = [buffer sha256];
+        [[NSUserDefaults standardUserDefaults] setObject:savedsalt forKey:kKeySalt];
+        [[NSUserDefaults standardUserDefaults] setObject:pwhash forKey:kKeyHash];
+    }
+    return YES;
+}
+
+
 -(BOOL)masterPasswordViewShouldClose:(MasterPasswordViewController *)controller
 {
     //    NSAssert( self.tabBarController.modalView == contoller, @"Not the modal controller" );
@@ -159,19 +188,9 @@ enum {
         return NO;
     }
     NSString *pw = controller.passwordText;
-    // This is REALLY bad...
-    // We save an SHA256 hash of the password, and compare with that...
-    // It would be better to maybe try and decrypt the file (if it exists)
-    NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:@"pwhash"];
-    NSData *pwhash = [[pw asDataUTF8] sha256];
-    if( savedhash ) {
-        if( ![pwhash isEqualToData:savedhash] ) {
-            return NO;
-        }
-    } else {
-        [[NSUserDefaults standardUserDefaults] setObject:pwhash forKey:@"pwhash"];
+    if( ![self checkMasterPassword:pw] ) {
+        return NO;
     }
-    // End all kinds of gross...
     self.password = pw;
     [self.tabBarController dismissModalViewControllerAnimated:YES];
     self.pwitems = [self getData];
@@ -237,7 +256,9 @@ enum {
         [controller release];
     }
     {
-        // This is a dummy view...
+        // This is a dummy view... we never actually display it.
+        // The UITabBarControllerDelegate:shouldSelectViewController detects it,
+        // and the puts up the lock screen.
         UIViewController *c = [UIViewController new];
         [self setController:c
               tabBarItemWithTitle:NSLocalizedString(@"Lock",nil)
