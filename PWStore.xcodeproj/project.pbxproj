@@ -14,8 +14,10 @@
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		E384DD6B157582C400A90DDA /* NSCoder+withDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */; };
-		E384DDAC1575886100A90DDA /* get.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DDAA1575886100A90DDA /* get.png */; };
-		E384DDAD1575886100A90DDA /* lock32.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DDAB1575886100A90DDA /* lock32.png */; };
+		E384DEE61575990400A90DDA /* icon_lock.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE21575990400A90DDA /* icon_lock.png */; };
+		E384DEE71575990400A90DDA /* icon_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE31575990400A90DDA /* icon_refresh.png */; };
+		E384DEE81575990400A90DDA /* icon_safe.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE41575990400A90DDA /* icon_safe.png */; };
+		E384DEE91575990400A90DDA /* icon_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE51575990400A90DDA /* icon_settings.png */; };
 		E38E44FE1575518C00FB0AF6 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E44FD1575518C00FB0AF6 /* NSData+AES.m */; };
 		E38E45341575592100FB0AF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E45331575592100FB0AF6 /* Security.framework */; };
 		E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E45C315755B8F00FB0AF6 /* PWItem.m */; };
@@ -39,8 +41,10 @@
 		8D1107310486CEB800E47090 /* PWStore-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PWStore-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCoder+withDefaults.h"; sourceTree = "<group>"; };
 		E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCoder+withDefaults.m"; sourceTree = "<group>"; };
-		E384DDAA1575886100A90DDA /* get.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = get.png; path = Resources/get.png; sourceTree = "<group>"; };
-		E384DDAB1575886100A90DDA /* lock32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lock32.png; path = Resources/lock32.png; sourceTree = "<group>"; };
+		E384DEE21575990400A90DDA /* icon_lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_lock.png; path = Resources/icon_lock.png; sourceTree = "<group>"; };
+		E384DEE31575990400A90DDA /* icon_refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_refresh.png; path = Resources/icon_refresh.png; sourceTree = "<group>"; };
+		E384DEE41575990400A90DDA /* icon_safe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_safe.png; path = Resources/icon_safe.png; sourceTree = "<group>"; };
+		E384DEE51575990400A90DDA /* icon_settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_settings.png; path = Resources/icon_settings.png; sourceTree = "<group>"; };
 		E38E44FC1575518C00FB0AF6 /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
 		E38E44FD1575518C00FB0AF6 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
 		E38E45331575592100FB0AF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -119,8 +123,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E384DDAA1575886100A90DDA /* get.png */,
-				E384DDAB1575886100A90DDA /* lock32.png */,
+				E384DEE21575990400A90DDA /* icon_lock.png */,
+				E384DEE31575990400A90DDA /* icon_refresh.png */,
+				E384DEE41575990400A90DDA /* icon_safe.png */,
+				E384DEE51575990400A90DDA /* icon_settings.png */,
 				E38E47451575725E00FB0AF6 /* MainWindow.xib */,
 				E38E47461575725E00FB0AF6 /* MasterPasswordViewController.xib */,
 				E38E47471575725E00FB0AF6 /* RootViewController.xib */,
@@ -193,8 +199,10 @@
 				E38E47481575725E00FB0AF6 /* MainWindow.xib in Resources */,
 				E38E47491575725E00FB0AF6 /* MasterPasswordViewController.xib in Resources */,
 				E38E474A1575725E00FB0AF6 /* RootViewController.xib in Resources */,
-				E384DDAC1575886100A90DDA /* get.png in Resources */,
-				E384DDAD1575886100A90DDA /* lock32.png in Resources */,
+				E384DEE61575990400A90DDA /* icon_lock.png in Resources */,
+				E384DEE71575990400A90DDA /* icon_refresh.png in Resources */,
+				E384DEE81575990400A90DDA /* icon_safe.png in Resources */,
+				E384DEE91575990400A90DDA /* icon_settings.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

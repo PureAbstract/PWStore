@@ -12,7 +12,7 @@
 #import "PWItem.h"
 #import "NSData+AES.h"
 enum {
-
+    kSaltLength = 16,
     kLockController = 1041,
 };
 
@@ -55,16 +55,23 @@ enum {
     return [[self documentFolder] stringByAppendingPathComponent:@"default.dat"];
 }
 
+-(NSData *)encryptionKey
+{
+    NSAssert( password_, @"NULL Password" );
+    NSAssert( password_.length > 0, @"Empty password" );
+    return [password_ dataUsingEncoding:NSUTF8StringEncoding];
+}
+
 -(void)saveData
 {
-    NSData *key = [NSMutableData dataWithLength:32];
+    NSData *key = [self encryptionKey];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pwitems_];
     NSData *enc = [data encryptWithKey:key
-                            saltLength:16];
+                            saltLength:kSaltLength];
     NSAssert( enc, @"Encryption problem" );
     // Verify...
     NSData *dec = [enc decryptWithKey:key
-                           saltLength:16];
+                           saltLength:kSaltLength];
     NSAssert( dec, @"Decryption problem" );
     NSAssert( [dec isEqualToData:data], @"Encryption mismatch" );
 
@@ -78,12 +85,30 @@ enum {
     NSAssert( load, @"Load error");
     NSAssert( [load isEqualToData:enc], @"Load mismatch" );
     NSData *ldec = [enc decryptWithKey:key
-                           saltLength:16];
+                           saltLength:kSaltLength];
     NSAssert( [ldec isEqualToData:data], @"Decrypt mismatch" );
 }
 
 -(NSMutableArray *)getData
 {
+    if( [[NSFileManager defaultManager] fileExistsAtPath:[self defaultFile]] ) {
+        NSData *load = [NSData dataWithContentsOfFile:[self defaultFile]];
+        if( load && load.length ) {
+            NSData *dec = [load decryptWithKey:[self encryptionKey]
+                                    saltLength:kSaltLength];
+            if( dec ) {
+                NSObject *obj = [NSKeyedUnarchiver unarchiveObjectWithData:dec];
+                if( obj ) {
+                    if( [obj isKindOfClass:[NSMutableArray class]] ) {
+                        return (NSMutableArray *)obj;
+                    }
+                    if( [obj isKindOfClass:[NSArray class]] ) {
+                        return [NSMutableArray arrayWithArray:(NSArray *)obj];
+                    }
+                }
+            }
+        }
+    }
     // Hack: Data for testing
     PWItem *pw = [PWItem new];
     pw.title = @"Title";
@@ -106,6 +131,7 @@ enum {
         self.password = controller.passwordText;
         [self.tabBarController dismissModalViewControllerAnimated:YES];
         self.pwitems = [self getData];
+        [self saveData];
         return YES;
     } else {
         return NO;
@@ -125,11 +151,12 @@ enum {
     NSMutableArray *tabBarControllers = [NSMutableArray arrayWithCapacity:4];
     //[tabBarControllers addObject:navigationController];
 
+    // NOTE: iPhone 3 size is 30x30, Retina is 60x60
     // These are just here for examples...
     {
         RootViewController *c = [[RootViewController alloc] initWithStyle:UITableViewStyleGrouped];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Data",nil)
-                                                           image:nil
+                                                           image:[UIImage imageNamed:@"icon_safe.png"]
                                                              tag:0];
         c.tabBarItem = item;
         [tabBarControllers addObject:c];
@@ -139,7 +166,17 @@ enum {
     {
         UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Sync",nil)
-                                                           image:[UIImage imageNamed:@"get.png"]
+                                                           image:[UIImage imageNamed:@"icon_refresh.png"]
+                                                             tag:0];
+        c.tabBarItem = item;
+        [tabBarControllers addObject:c];
+        [item release];
+        [c release];
+    }
+    {
+        UITableViewController *c = [[UITableViewController alloc] initWithStyle:UITableViewStylePlain];
+        UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings",nil)
+                                                           image:[UIImage imageNamed:@"icon_settings.png"]
                                                              tag:0];
         c.tabBarItem = item;
         [tabBarControllers addObject:c];
@@ -150,7 +187,7 @@ enum {
         // This is a dummy view...
         UIViewController *c = [UIViewController new];
         UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Lock",nil)
-                                                           image:[UIImage imageNamed:@"lock32.png"]
+                                                           image:[UIImage imageNamed:@"icon_lock.png"]
                                                              tag:kLockController];
         c.tabBarItem = item;
         [tabBarControllers addObject:c];
