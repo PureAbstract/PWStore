@@ -3,7 +3,7 @@
 //  PWStore
 //
 //  Created by Andy Sawyer on 29/05/2012.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2012 Andy Sawyer
 //
 
 #import <Foundation/Foundation.h>
