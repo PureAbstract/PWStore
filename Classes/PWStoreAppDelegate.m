@@ -164,7 +164,7 @@ enum {
     // It would be better to maybe try and decrypt the file (if it exists)
     NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:@"pwhash"];
     NSData *pwhash = [[pw asDataUTF8] sha256];
-    if( savedhash && savedsalt ) {
+    if( savedhash ) {
         if( ![pwhash isEqualToData:savedhash] ) {
             return NO;
         }
