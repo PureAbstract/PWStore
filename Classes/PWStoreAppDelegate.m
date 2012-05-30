@@ -13,6 +13,9 @@
 #import "SyncViewController.h"
 #import "PWItem.h"
 #import "NSData+AES.h"
+#import "UIApplication+Utility.h"
+#import "NSString+Utility.h"
+
 enum {
     kSaltLength = 16,
     kLockController = 1041,
@@ -44,72 +47,95 @@ enum {
     [self showMasterPasswordControllerAnimated:NO];
 }
 
-#pragma mark -
-#pragma mark Test data
--(NSString *)documentFolder
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    return [paths objectAtIndex:0];
-}
-
--(NSString *)defaultFile
-{
-    return [[self documentFolder] stringByAppendingPathComponent:@"default.dat"];
-}
-
 -(NSData *)encryptionKey
 {
     NSAssert( password_, @"NULL Password" );
     NSAssert( password_.length > 0, @"Empty password" );
-    return [password_ dataUsingEncoding:NSUTF8StringEncoding];
+    return [password_ asDataUTF8];
+}
+
+#pragma mark -
+#pragma mark Test data
+
+-(NSString *)defaultFile
+{
+    return [UIApplication documentPath:@"default.dat"];
 }
 
 -(void)saveData
 {
+    NSString *filename = [self defaultFile];
     NSData *key = [self encryptionKey];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pwitems_];
     NSData *enc = [data encryptWithKey:key
                             saltLength:kSaltLength];
     NSAssert( enc, @"Encryption problem" );
-    // Verify...
+    // VERIFY
     NSData *dec = [enc decryptWithKey:key
                            saltLength:kSaltLength];
     NSAssert( dec, @"Decryption problem" );
     NSAssert( [dec isEqualToData:data], @"Encryption mismatch" );
-
+    // END VERIFY
     NSError *error = nil;
-    [enc writeToFile:[self defaultFile]
-             options:(NSDataWritingAtomic|NSDataWritingFileProtectionComplete)
-               error:&error];
-    if( error ) {
+    if( ![enc writeToFile:filename
+                  options:(NSDataWritingAtomic|NSDataWritingFileProtectionComplete)
+                    error:&error] ) {
+        NSLog(@"Error saving file %@",error);
     }
-    NSData *load = [NSData dataWithContentsOfFile:[self defaultFile]];
+    if( error ) {
+        NSAssert( error == nil, @"Error saving file" );
+    }
+    // VERIFY
+    NSData *load = [NSData dataWithContentsOfFile:filename];
     NSAssert( load, @"Load error");
     NSAssert( [load isEqualToData:enc], @"Load mismatch" );
     NSData *ldec = [enc decryptWithKey:key
                            saltLength:kSaltLength];
     NSAssert( [ldec isEqualToData:data], @"Decrypt mismatch" );
+    // END VERIFY
+}
+
+-(NSMutableArray *)loadData
+{
+    NSString *filename = [self defaultFile];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:filename] ) {
+        NSLog(@"File not found %@",filename);
+        return nil;
+    }
+    NSData *load = [NSData dataWithContentsOfFile:filename];
+    if( !load || ( load.length == 0 ) ) {
+        NSLog(@"Failed to load from file");
+        return nil;
+    }
+    NSData *dec = [load decryptWithKey:[self encryptionKey]
+                            saltLength:kSaltLength];
+    if( !dec ) {
+        NSLog(@"Decryption error");
+        return nil;
+    }
+    NSObject *obj = [NSKeyedUnarchiver unarchiveObjectWithData:dec];
+    if( !obj ) {
+        NSLog(@"Unarchive error");
+        return nil;
+    }
+    if( [obj isKindOfClass:[NSMutableArray class]] ) {
+        return (NSMutableArray *) obj;
+    }
+    if( [obj isKindOfClass:[NSArray class]] ) {
+        return [NSMutableArray arrayWithArray:(NSArray *)obj];
+    }
+    NSLog(@"Unexpected object type %@",obj);
+    return nil;
 }
 
 -(NSMutableArray *)getData
 {
-    if( [[NSFileManager defaultManager] fileExistsAtPath:[self defaultFile]] ) {
-        NSData *load = [NSData dataWithContentsOfFile:[self defaultFile]];
-        if( load && load.length ) {
-            NSData *dec = [load decryptWithKey:[self encryptionKey]
-                                    saltLength:kSaltLength];
-            if( dec ) {
-                NSObject *obj = [NSKeyedUnarchiver unarchiveObjectWithData:dec];
-                if( obj ) {
-                    if( [obj isKindOfClass:[NSMutableArray class]] ) {
-                        return (NSMutableArray *)obj;
-                    }
-                    if( [obj isKindOfClass:[NSArray class]] ) {
-                        return [NSMutableArray arrayWithArray:(NSArray *)obj];
-                    }
-                }
-            }
+    NSMutableArray *data = [self loadData];
+    if( data ) {
+        for( NSObject *obj in data ) {
+            NSAssert( [obj isKindOfClass:[PWItem class]], @"Not a PWItem?" );
         }
+        return data;
     }
     // Hack: Data for testing
     PWItem *pw = [PWItem new];
@@ -119,9 +145,9 @@ enum {
     pw.url = @"URL";
     pw.email = @"git@pureabstract.org";
     pw.notes = @"Notes and \n more notes";
-    NSMutableArray *arr = [NSMutableArray arrayWithObject:pw];
+    data = [NSMutableArray arrayWithObject:pw];
     [pw release];
-    return arr;
+    return data;
 }
 
 #pragma mark -
@@ -129,15 +155,28 @@ enum {
 -(BOOL)masterPasswordViewShouldClose:(MasterPasswordViewController *)controller
 {
     //    NSAssert( self.tabBarController.modalView == contoller, @"Not the modal controller" );
-    if( controller.passwordText.length > 0 ) {
-        self.password = controller.passwordText;
-        [self.tabBarController dismissModalViewControllerAnimated:YES];
-        self.pwitems = [self getData];
-        [self saveData];
-        return YES;
-    } else {
+    if( controller.passwordText.length == 0 ) {
         return NO;
     }
+    NSString *pw = controller.passwordText;
+    // This is REALLY bad...
+    // We save an SHA256 hash of the password, and compare with that...
+    // It would be better to maybe try and decrypt the file (if it exists)
+    NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:@"pwhash"];
+    NSData *pwhash = [[pw asDataUTF8] sha256];
+    if( savedhash && savedsalt ) {
+        if( ![pwhash isEqualToData:savedhash] ) {
+            return NO;
+        }
+    } else {
+        [[NSUserDefaults standardUserDefaults] setObject:pwhash forKey:@"pwhash"];
+    }
+    // End all kinds of gross...
+    self.password = pw;
+    [self.tabBarController dismissModalViewControllerAnimated:YES];
+    self.pwitems = [self getData];
+    [self saveData];
+    return YES;
 }
 
 
