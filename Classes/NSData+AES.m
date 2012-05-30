@@ -18,6 +18,13 @@
     return hash;
 }
 
+-(NSData *)sha1
+{
+    NSMutableData *hash = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
+    CC_SHA1( self.bytes, self.length, hash.mutableBytes );
+    return hash;
+}
+
 +(NSData *)randomBytes:(size_t)length
 {
     NSMutableData *bytes = [NSMutableData dataWithLength:length];

@@ -10,8 +10,9 @@
 
 
 @interface NSData (AES)
-// The first two aren't really AES...
+// The first few aren't really AES...
 -(NSData *)sha256;
+-(NSData *)sha1;
 +(NSMutableData *)randomBytes:(size_t)length;
 
 // These are though
