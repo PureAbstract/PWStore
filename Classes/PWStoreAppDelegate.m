@@ -212,7 +212,7 @@ enum {
                                                          image:image
                                                            tag:tag];
     controller.tabBarItem = button;
-    [button release];    
+    [button release];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
