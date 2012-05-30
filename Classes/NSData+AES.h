@@ -10,9 +10,13 @@
 
 
 @interface NSData (AES)
+//
+// Note that all these funtions return NSMutableData (vs NSData).
+// This is primarily so they can be wiped after use if necessary
 // The first few aren't really AES...
--(NSData *)sha256;
--(NSData *)sha1;
+-(NSMutableData *)sha256;
+-(NSMutableData *)sha1;
+// Generate some random bytes
 +(NSMutableData *)randomBytes:(size_t)length;
 
 // These are though
@@ -23,4 +27,12 @@
 // Decrypt and remove salt.
 -(NSMutableData *)decryptWithKey:(NSData *)key saltLength:(size_t)length;
 
+@end
+
+@interface NSMutableData (AES)
+// NOTE: These fill with self.length bytes.
+// Fill with zeros
+-(void)wipeZero;
+// Fill with random data
+-(void)wipeRandom;
 @end
