@@ -13,4 +13,5 @@
 -(NSString *)stringForKey:(NSString *)key;
 -(NSString *)stringForKey:(NSString *)key default:(NSString *)default_;
 -(NSDate *)dateForKey:(NSString *)key;
+-(NSArray *)arrayForKey:(NSString *)key;
 @end

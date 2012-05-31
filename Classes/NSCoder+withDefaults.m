@@ -10,11 +10,25 @@
 
 
 @implementation NSCoder (withDefaults)
--(NSString *)stringForKey:(NSString *)key default:(NSString *)default_
+-(id)objectOfType:(Class)clas forKey:(NSString *)key
 {
     id obj = [self decodeObjectForKey:key];
-    if( obj && [obj isKindOfClass:[NSString class]] ) {
-        return (NSString *)obj;
+    if( !obj ) {
+        NSLog(@"No object for key %@",key);
+        return nil;
+    }
+    if( ![obj isKindOfClass:clas] ) {
+        NSLog(@"Key %@ : Expected %@, got %@",key,clas,[obj class]);
+        return nil;
+    }
+    return obj;
+}
+
+-(NSString *)stringForKey:(NSString *)key default:(NSString *)default_
+{
+    NSString *obj = (NSString *)[self objectOfType:[NSString class] forKey:key];
+    if( obj ) {
+        return obj;
     }
     return default_;
 }
@@ -26,11 +40,17 @@
 
 -(NSDate *)dateForKey:(NSString *)key
 {
-    id obj = [self decodeObjectForKey:key];
-    if( obj && [obj isKindOfClass:[NSDate class]] ) {
-        return (NSDate *)obj;
+    NSDate *obj = (NSDate *)[self objectOfType:[NSDate class] forKey:key];
+    if( obj ) {
+        return obj;
     }
     return [NSDate date];
 }
+
+-(NSArray *)arrayForKey:(NSString *)key
+{
+    return (NSArray *)[self objectOfType:[NSArray class] forKey:key];
+}
+
 
 @end
