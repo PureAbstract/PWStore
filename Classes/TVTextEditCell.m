@@ -43,8 +43,6 @@
     //[super layoutSubviews];
     const float margin = 20.0;
     const float offset = 1.0;
-    CGRect labelFrame = self.textLabel.frame;
-    CGRect labelBounds = self.textLabel.bounds;
     CGRect frame = self.contentView.frame;
     CGRect editFrame = CGRectInset( frame, margin, offset );
     editFrame.size.height = 25;
