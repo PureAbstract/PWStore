@@ -14,6 +14,7 @@
 #pragma mark Properties
 @synthesize passwordField = passwordField_;
 @synthesize delegate = delegate_;
+@synthesize mode = mode_;
 
 -(NSString *)passwordText
 {
