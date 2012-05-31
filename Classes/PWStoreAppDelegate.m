@@ -31,6 +31,9 @@ enum {
 @synthesize pwitems = pwitems_;
 
 
+static NSString *kMasterPWSalt = @"pwsalt";
+static NSString *kMasterPWHash = @"pwhash";
+
 #pragma mark -
 #pragma mark Master Password
 -(void)showMasterPasswordControllerAnimated:(BOOL)animated
@@ -39,6 +42,7 @@ enum {
     self.pwitems = [NSMutableArray arrayWithCapacity:0];
     MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
     mpv.delegate = self;
+    mpv.mode = kMasterPasswordEnterMode;
     [self.tabBarController presentModalViewController:mpv animated:animated];
     [mpv release];
 }
@@ -160,6 +164,15 @@ enum {
     pw.notes = @"Notes and \n more notes";
     data = [NSMutableArray arrayWithObject:pw];
     [pw release];
+    pw = [PWItem new];
+    pw.title = @"Other Title";
+    pw.login = @"other login";
+    pw.password = @"Another password";
+    pw.url = @"The URL";
+    pw.email = @"Somebody@example.com";
+    pw.notes = @"Notes on this item";
+    [data addObject:pw];
+    [pw release];
     return data;
 }
 
@@ -167,13 +180,11 @@ enum {
 #pragma mark MasterPasswordViewControllerDelegate
 -(BOOL)checkMasterPassword:(NSString *)check
 {
-    static NSString * const kKeyHash = @"pwhash";
-    static NSString * const kKeySalt = @"pwsalt";
     // NOTE - this is TOTALLY BOGUS
     // We're saving an SHA256 hash of the master pw in the user defaults.
     // That isn't a good idea - but will sort of do for now.
-    NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:kKeyHash];
-    NSData *savedsalt = [[NSUserDefaults standardUserDefaults] dataForKey:kKeySalt];
+    NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:kMasterPWHash];
+    NSData *savedsalt = [[NSUserDefaults standardUserDefaults] dataForKey:kMasterPWSalt];
     NSData *pwdata = [check asDataUTF8];
     if( savedhash && savedsalt ) {
         NSMutableData *buffer= [NSMutableData dataWithCapacity:pwdata.length+savedsalt.length];
@@ -187,8 +198,8 @@ enum {
         [buffer appendData:pwdata];
         [buffer appendData:savedsalt];
         NSData *pwhash = [buffer sha256];
-        [[NSUserDefaults standardUserDefaults] setObject:savedsalt forKey:kKeySalt];
-        [[NSUserDefaults standardUserDefaults] setObject:pwhash forKey:kKeyHash];
+        [[NSUserDefaults standardUserDefaults] setObject:savedsalt forKey:kMasterPWSalt];
+        [[NSUserDefaults standardUserDefaults] setObject:pwhash forKey:kMasterPWHash];
     }
     return YES;
 }
