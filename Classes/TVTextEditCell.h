@@ -11,8 +11,17 @@
 
 @class TVTextEditCell;
 
-@protocol TVTextEditCellDelegate
+@protocol TVTextEditCellDelegate <NSObject>
 -(void)textEditCellChanged:(TVTextEditCell *)textEditCell;
+@optional
+// As per UITextFieldDelegate
+- (BOOL)textEditCellShouldBeginEditing:(TVTextEditCell *)textEditCell;
+- (void)textEditCellDidBeginEditing:(TVTextEditCell *)textEditCell;
+- (BOOL)textEditCellShouldEndEditing:(TVTextEditCell *)textEditCell;
+- (void)textEditCellDidEndEditing:(TVTextEditCell *)textEditCell;
+- (BOOL)textEditCell:(TVTextEditCell *)textEditCell shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
+- (BOOL)textEditCellShouldClear:(TVTextEditCell *)textEditCell;
+- (BOOL)textEditCellShouldReturn:(TVTextEditCell *)textEditCell;
 @end
 
 @interface TVTextEditCell : UITableViewCell<UITextFieldDelegate> {

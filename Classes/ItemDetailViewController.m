@@ -7,7 +7,6 @@
 //
 
 #import "ItemDetailViewController.h"
-#import "TVTextEditCell.h"
 
 @implementation ItemDetailViewController
 @synthesize item = item_;
@@ -113,15 +112,15 @@ static NSString *cellLabels [] = {
 
     static NSString *CellIdentifier = @"Cell";
 
-    TVTextEditCell *cell = (TVTextEditCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[TVTextEditCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
     // Configure the cell...
-    cell.tag = indexPath.section;
-    cell.textLabel.text = (NSString *)[values_ objectAtIndex:indexPath.section];
-    cell.textEditField.text = (NSString *)[values_ objectAtIndex:indexPath.section];
+    NSUInteger itemIndex = indexPath.section;
+    cell.tag = itemIndex;
+    cell.textLabel.text = (NSString *)[values_ objectAtIndex:itemIndex];
     return cell;
 }
 
@@ -177,8 +176,7 @@ static NSString *cellLabels [] = {
     if( indexPath.section == 5 ) {
         return tableView.rowHeight * 5;
     }
-    //return tableView.rowHeight;
-    return 25;
+    return tableView.rowHeight;
 }
 
 
@@ -194,12 +192,6 @@ static NSString *cellLabels [] = {
     [self.navigationController pushViewController:detailViewController animated:YES];
     [detailViewController release];
     */
-}
-
-#pragma mark -
-#pragma mark TVTextEditCellDelegate
--(void)textEditCellChanged:(TVTextEditCell *)textEditCell
-{
 }
 
 #pragma mark -

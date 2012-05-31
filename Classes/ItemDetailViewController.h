@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "PWItem.h"
-#import "TVTextEditCell.h"
 
-@interface ItemDetailViewController : UITableViewController<TVTextEditCellDelegate> {
+@interface ItemDetailViewController : UITableViewController {
     PWItem *item_;
     NSMutableArray *values_;
 }
