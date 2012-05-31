@@ -39,7 +39,6 @@ static NSString *kMasterPWHash = @"pwhash";
 -(void)showMasterPasswordControllerAnimated:(BOOL)animated
 {
     self.password = nil;
-    self.pwitems = [NSMutableArray arrayWithCapacity:0];
     MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
     mpv.delegate = self;
     mpv.mode = kMasterPasswordEnterMode;
@@ -105,7 +104,7 @@ static NSString *kMasterPWHash = @"pwhash";
     return [self saveDataInFile:filename];
 }
 
--(NSMutableArray *)loadDataFromFile:(NSString *)filename
+-(PWData *)loadDataFromFile:(NSString *)filename
 {
     if( ![[NSFileManager defaultManager] fileExistsAtPath:filename] ) {
         NSLog(@"File not found %@",filename);
@@ -127,25 +126,22 @@ static NSString *kMasterPWHash = @"pwhash";
         NSLog(@"Unarchive error");
         return nil;
     }
-    if( [obj isKindOfClass:[NSMutableArray class]] ) {
-        return (NSMutableArray *) obj;
-    }
-    if( [obj isKindOfClass:[NSArray class]] ) {
-        return [NSMutableArray arrayWithArray:(NSArray *)obj];
+    if( [obj isKindOfClass:[PWData class]] ) {
+        return (PWData *) obj;
     }
     NSLog(@"Unexpected object type %@",obj);
     return nil;
 }
 
--(NSMutableArray *)loadData
+-(PWData *)loadData
 {
     NSString *filename = [self defaultFile];
     return[self loadDataFromFile:filename];
 }
 
--(NSMutableArray *)getData
+-(PWData *)getData
 {
-    NSMutableArray *data = [self loadData];
+    PWData *data = [self loadData];
     if( data ) {
         // Debug
         for( NSObject *obj in data ) {
@@ -155,6 +151,8 @@ static NSString *kMasterPWHash = @"pwhash";
         return data;
     }
     // Hack: Data for testing
+    data = [[[PWData alloc] init] autorelease];
+
     PWItem *pw = [PWItem new];
     pw.title = @"Title";
     pw.login = @"Login";
@@ -162,8 +160,9 @@ static NSString *kMasterPWHash = @"pwhash";
     pw.url = @"URL";
     pw.email = @"git@pureabstract.org";
     pw.notes = @"Notes and \n more notes";
-    data = [NSMutableArray arrayWithObject:pw];
+    [data addObject:pw];
     [pw release];
+
     pw = [PWItem new];
     pw.title = @"Other Title";
     pw.login = @"other login";
@@ -218,7 +217,18 @@ static NSString *kMasterPWHash = @"pwhash";
     self.password = pw;
     [self.tabBarController dismissModalViewControllerAnimated:YES];
     self.pwitems = [self getData];
-    [self saveData];
+    [self saveData];            // FIXME
+    if( navigationController_ ) {
+        if( navigationController_.viewControllers ) {
+            if( navigationController_.viewControllers.count > 0 ) {
+                NSObject *view = [navigationController_.viewControllers objectAtIndex:0];
+                if( [view isKindOfClass:[RootViewController class]] ) {
+                    RootViewController *root = (RootViewController *)view;
+                    root.data = self.pwitems;
+                }
+            }
+        }
+    }
     return YES;
 }
 
@@ -281,7 +291,6 @@ static NSString *kMasterPWHash = @"pwhash";
     [self.window addSubview:tabBarController_.view];
     //[self.window addSubview:navigationController.view];
     [self.window makeKeyAndVisible];
-    self.pwitems = [NSMutableArray arrayWithCapacity:0];
     [self showMasterPasswordController];
     return YES;
 }

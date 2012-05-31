@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MasterPasswordViewController.h"
+#import "PWData.h"
 
 @interface PWStoreAppDelegate : NSObject <UIApplicationDelegate,
                                           UITabBarControllerDelegate,
@@ -16,13 +17,13 @@
     UINavigationController *navigationController_;
     UITabBarController *tabBarController_;
     NSString *password_;
-    NSMutableArray *pwitems_; // Array of PWItem
+    PWData *pwitems_;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, copy) NSString *password;
-@property (nonatomic, retain) NSMutableArray *pwitems;
+@property (nonatomic, retain) PWData *pwitems;
 @end
 

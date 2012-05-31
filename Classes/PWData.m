@@ -40,10 +40,18 @@ static NSString *kPropKeyItems = @"i";
 
 -(void)addObject:(PWItem *)item
 {
-    NSAssert( [item isKindOfClass:[PWItem class]], @"Not a PWItem" );
+    NSAssert( [item isKindOfClass:[PWItem class]], @"Expected a PWItem, got %@", item );
     [self.data addObject:item];
     // TODO: Resort collection - notify observers
 }
+
+-(PWItem *)objectAtIndex:(NSUInteger)index
+{
+    NSObject *obj = [self.data objectAtIndex:index];
+    NSAssert( [obj isKindOfClass:[PWItem class]], @"Expected PWItem" );
+    return (PWItem *)obj;
+}
+
 
 #pragma mark -
 #pragma mark Memory management
@@ -77,6 +85,16 @@ static NSString *kPropKeyItems = @"i";
         }
     }
     return self;
+}
+
+
+#pragma mark -
+#pragma mark NSFastEnumeration
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len
+{
+    return [self.data countByEnumeratingWithState:state
+                                          objects:stackbuf
+                                            count:len];
 }
 
 @end

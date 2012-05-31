@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "PWData.h"
 @interface RootViewController : UITableViewController {
+    PWData *data_;
 }
-
+@property (nonatomic,retain) PWData *data;
 @end

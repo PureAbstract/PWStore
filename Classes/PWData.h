@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "PWItem.h"
 
-@interface PWData : NSObject<NSCoding> {
+@interface PWData : NSObject<NSCoding, NSFastEnumeration> {
     NSMutableArray *data_;
 }
 @property (nonatomic,readonly) NSMutableArray *data;
 // Number of items in collection
 -(NSUInteger)count;
 -(void)addObject:(PWItem *)item;
-
+-(PWItem *)objectAtIndex:(NSUInteger)index;
 @end

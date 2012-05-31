@@ -10,7 +10,9 @@
 
 
 @implementation RootViewController
-
+#pragma mark -
+#pragma mark Properties
+@synthesize data = data_;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -69,6 +71,9 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if( data_ ) {
+        return data_.count;
+    }
     return 0;
 }
 
@@ -84,6 +89,7 @@
     }
 
     // Configure the cell.
+    cell.textLabel.text = [data_ objectAtIndex:indexPath.row].title;
 
     return cell;
 }
