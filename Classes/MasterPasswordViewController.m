@@ -10,9 +10,20 @@
 
 
 @implementation MasterPasswordViewController
+#pragma mark -
+#pragma mark Properties
 @synthesize passwordField = passwordField_;
 @synthesize delegate = delegate_;
 
+-(NSString *)passwordText
+{
+    NSAssert( passwordField_, @"Null field" );
+    NSAssert( passwordField_.text, @"Null text" );
+    return passwordField_.text;
+}
+
+#pragma mark -
+#pragma mark View Lifecycle
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -39,14 +50,6 @@
 }
 */
 
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-    // Release any cached data, images, etc. that aren't in use.
-}
-
 - (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
@@ -54,6 +57,15 @@
     self.passwordField = nil;
 }
 
+
+#pragma mark -
+#pragma mark Memory Management
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+
+    // Release any cached data, images, etc. that aren't in use.
+}
 
 - (void)dealloc {
     [passwordField_ release];
@@ -69,25 +81,13 @@
     // Ideally, I'd like to disable the 'Done' button when the
     // password is empty...
     NSAssert( textField == passwordField_, @"Unexpected sender" );
-    if( textField.text.length > 0 ) {
-        if( delegate_ ) {
-            if( [delegate_ masterPasswordViewShouldClose:self] ) {
-                [textField resignFirstResponder];
-                return YES;
-            }
+    if( delegate_ ) {
+        if( [delegate_ masterPasswordViewShouldClose:self] ) {
+            [textField resignFirstResponder];
+            return YES;
         }
     }
     return NO;
 }
-
-
-#pragma mark -
--(NSString *)passwordText
-{
-    NSAssert( passwordField_, @"Null field" );
-    NSAssert( passwordField_.text, @"Null text" );
-    return passwordField_.text;
-}
-
 
 @end

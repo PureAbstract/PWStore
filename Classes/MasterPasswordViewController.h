@@ -20,6 +20,6 @@
 }
 @property (nonatomic,retain) IBOutlet UITextField *passwordField;
 @property (nonatomic,assign) id<MasterPasswordViewControllerDelegate> delegate;
+@property (nonatomic,readonly) NSString *passwordText;
 
--(NSString *)passwordText;
 @end
