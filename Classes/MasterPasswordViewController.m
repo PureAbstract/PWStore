@@ -66,6 +66,8 @@
 // called when 'return' key pressed. return NO to ignore.
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    // Ideally, I'd like to disable the 'Done' button when the
+    // password is empty...
     NSAssert( textField == passwordField_, @"Unexpected sender" );
     if( textField.text.length > 0 ) {
         if( delegate_ ) {
