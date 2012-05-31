@@ -3,13 +3,14 @@
 //  PWStore
 //
 //  Created by Andy Sawyer on 31/05/2012.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2012 Andy Sawyer. All rights reserved.
 //
 
 #import "TVTextEditCell.h"
 
 
 @implementation TVTextEditCell
+@synthesize delegate = delegate_;
 
 -(UITextField *)textEditField {
     return textEditField_;
@@ -26,6 +27,10 @@
         [self.contentView addSubview:textEditField_];
         self.contentView.autoresizesSubviews = YES;
         // Initialization code.
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onTextFieldChanged:)
+                                                     name:UITextFieldTextDidChangeNotification
+                                                   object:textEditField_];
     }
     return self;
 }
@@ -48,8 +53,16 @@
     // Configure the view for the selected state.
 }
 
+-(void)onTextFieldChanged:(NSNotification *)notification
+{
+    if( delegate_ ) {
+        [delegate_ textEditCellChanged:self];
+    }
+}
+
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [textEditField_ release];
     [super dealloc];
 }

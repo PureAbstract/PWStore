@@ -3,7 +3,7 @@
 //  PWStore
 //
 //  Created by Andy Sawyer on 31/05/2012.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2012 Andy Sawyer. All rights reserved.
 //
 
 #import "ItemDetailViewController.h"
@@ -119,6 +119,7 @@ static NSString *cellLabels [] = {
     }
 
     // Configure the cell...
+    cell.tag = indexPath.section;
     cell.textLabel.text = (NSString *)[values_ objectAtIndex:indexPath.section];
     cell.textEditField.text = (NSString *)[values_ objectAtIndex:indexPath.section];
     return cell;
@@ -195,6 +196,11 @@ static NSString *cellLabels [] = {
     */
 }
 
+#pragma mark -
+#pragma mark TVTextEditCellDelegate
+-(void)textEditCellChanged:(TVTextEditCell *)textEditCell
+{
+}
 
 #pragma mark -
 #pragma mark Memory management
