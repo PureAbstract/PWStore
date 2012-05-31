@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PWItem.h"
 
-
-@interface PWData : NSObject {
-
+@interface PWData : NSObject<NSCoding> {
+    NSMutableArray *data_;
 }
+@property (nonatomic,readonly) NSMutableArray *data;
+// Number of items in collection
+-(NSUInteger)count;
+-(void)addObject:(PWItem *)item;
 
 @end
