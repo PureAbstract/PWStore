@@ -12,10 +12,6 @@
 @implementation TVTextEditCell
 
 -(UITextField *)textEditField {
-    if( !textEditField_ ) {
-        textEditField_ = [[UITextField alloc] init];
-        textEditField_.delegate = self;
-    }
     return textEditField_;
 }
 
@@ -23,11 +19,27 @@
 
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        textEditField_ = [[UITextField alloc] init];
+        textEditField_.autoresizingMask = 0; // UIViewAutoresizingFlexibleWidth;
+        textEditField_.delegate = self;
+        textEditField_.backgroundColor = [UIColor blueColor];
+        [self.contentView addSubview:textEditField_];
+        self.contentView.autoresizesSubviews = YES;
         // Initialization code.
     }
     return self;
 }
 
+
+-(void)layoutSubviews
+{
+    const float margin = 20.0;
+    const float offset = 1.0;
+    CGRect frame = self.contentView.frame;
+    CGRect editFrame = CGRectInset( frame, margin, offset );
+    editFrame.size.height = 25;
+    textEditField_.frame = editFrame;
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
 

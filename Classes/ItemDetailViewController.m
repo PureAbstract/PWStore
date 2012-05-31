@@ -120,6 +120,7 @@ static NSString *cellLabels [] = {
 
     // Configure the cell...
     cell.textLabel.text = (NSString *)[values_ objectAtIndex:indexPath.section];
+    cell.textEditField.text = (NSString *)[values_ objectAtIndex:indexPath.section];
     return cell;
 }
 
@@ -173,9 +174,10 @@ static NSString *cellLabels [] = {
 {
     // Notes
     if( indexPath.section == 5 ) {
-        return tableView.rowHeight * 10;
+        return tableView.rowHeight * 5;
     }
-    return tableView.rowHeight;
+    //return tableView.rowHeight;
+    return 25;
 }
 
 
