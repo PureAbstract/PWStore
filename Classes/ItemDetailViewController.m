@@ -1,34 +1,68 @@
 //
-//  RootViewController.m
+//  ItemDetailViewController.m
 //  PWStore
 //
-//  Created by Andy Sawyer on 29/05/2012.
-//  Copyright 2012 Andy Sawyer
+//  Created by Andy Sawyer on 31/05/2012.
+//  Copyright 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "RootViewController.h"
 #import "ItemDetailViewController.h"
+#import "TVTextEditCell.h"
 
-@implementation RootViewController
+@implementation ItemDetailViewController
+@synthesize item = item_;
+
 #pragma mark -
-#pragma mark Properties
-@synthesize data = data_;
+#pragma mark Initialization
+
+static NSString *cellLabels [] = {
+    @"Title",
+    @"Login",
+    @"Password",
+    @"URL",
+    @"Email",
+    @"Notes",
+};
+
+-(id)initWithItem:(PWItem *)item
+{
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if( self ) {
+        self.item = item;
+        values_ = [[NSMutableArray alloc] initWithCapacity:6];
+        [values_ addObject:item.title];
+        [values_ addObject:item.login];
+        [values_ addObject:item.password];
+        [values_ addObject:item.url];
+        [values_ addObject:item.email];
+        [values_ addObject:item.notes];
+    }
+    return self;
+}
+
+/*
+- (id)initWithStyle:(UITableViewStyle)style {
+    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization.
+    }
+    return self;
+}
+*/
+
 
 #pragma mark -
 #pragma mark View lifecycle
 
-
+/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
-                                                                                           target:nil
-                                                                                           action:nil] autorelease];
-    self.title = NSLocalizedString(@"Data",nil);
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-
+*/
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -50,31 +84,27 @@
     [super viewDidDisappear:animated];
 }
 */
-
 /*
- // Override to allow orientations other than the default portrait orientation.
+// Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations.
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
- */
+*/
 
 
 #pragma mark -
 #pragma mark Table view data source
 
-// Customize the number of sections in the table view.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    // Return the number of sections.
+    return values_.count;
 }
 
 
-// Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if( data_ ) {
-        return data_.count;
-    }
-    return 0;
+    // Return the number of rows in the section.
+    return 1;
 }
 
 
@@ -83,14 +113,13 @@
 
     static NSString *CellIdentifier = @"Cell";
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    TVTextEditCell *cell = (TVTextEditCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[TVTextEditCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    // Configure the cell.
-    cell.textLabel.text = [data_ objectAtIndex:indexPath.row].title;
-
+    // Configure the cell...
+    cell.textLabel.text = (NSString *)[values_ objectAtIndex:indexPath.section];
     return cell;
 }
 
@@ -134,24 +163,34 @@
 }
 */
 
+// fixed font style. use custom view (UILabel) if you want something different
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return cellLabels[section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Notes
+    if( indexPath.section == 5 ) {
+        return tableView.rowHeight * 10;
+    }
+    return tableView.rowHeight;
+}
+
 
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    PWItem *item = [self.data objectAtIndex:indexPath.row];
-    ItemDetailViewController *controller = [[ItemDetailViewController alloc] initWithItem:item];
+    // Navigation logic may go here. Create and push another view controller.
     /*
-      <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-      // ...
-      // Pass the selected object to the new view controller.
-      [self.navigationController pushViewController:detailViewController animated:YES];
-      [detailViewController release];
+    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     // ...
+     // Pass the selected object to the new view controller.
+    [self.navigationController pushViewController:detailViewController animated:YES];
+    [detailViewController release];
     */
-    [self.navigationController pushViewController:controller
-                                         animated:YES];
-    [controller release];
 }
 
 
@@ -162,7 +201,7 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+    // Relinquish ownership any cached data, images, etc. that aren't in use.
 }
 
 - (void)viewDidUnload {
@@ -172,6 +211,8 @@
 
 
 - (void)dealloc {
+    [values_ release];
+    [item_ release];
     [super dealloc];
 }
 
