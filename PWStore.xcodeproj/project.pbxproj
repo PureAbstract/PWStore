@@ -26,6 +26,8 @@
 		E384E1A01577FA9300A90DDA /* PWData.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E19F1577FA9300A90DDA /* PWData.m */; };
 		E384E2AF15780D0000A90DDA /* ItemDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E2AE15780D0000A90DDA /* ItemDetailViewController.m */; };
 		E384E3B21578184800A90DDA /* TVTextEditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E3B11578184800A90DDA /* TVTextEditCell.m */; };
+		E384E7C615792BDE00A90DDA /* ItemEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E384E7C415792BDE00A90DDA /* ItemEditViewController.m */; };
+		E384E7D015792C0100A90DDA /* ItemEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E384E7CF15792C0100A90DDA /* ItemEditViewController.xib */; };
 		E38E44FE1575518C00FB0AF6 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E44FD1575518C00FB0AF6 /* NSData+AES.m */; };
 		E38E45341575592100FB0AF6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38E45331575592100FB0AF6 /* Security.framework */; };
 		E38E45C415755B8F00FB0AF6 /* PWItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E38E45C315755B8F00FB0AF6 /* PWItem.m */; };
@@ -69,6 +71,9 @@
 		E384E2AE15780D0000A90DDA /* ItemDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemDetailViewController.m; sourceTree = "<group>"; };
 		E384E3B01578184800A90DDA /* TVTextEditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TVTextEditCell.h; sourceTree = "<group>"; };
 		E384E3B11578184800A90DDA /* TVTextEditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVTextEditCell.m; sourceTree = "<group>"; };
+		E384E7C315792BDE00A90DDA /* ItemEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemEditViewController.h; sourceTree = "<group>"; };
+		E384E7C415792BDE00A90DDA /* ItemEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemEditViewController.m; sourceTree = "<group>"; };
+		E384E7CF15792C0100A90DDA /* ItemEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ItemEditViewController.xib; path = Resources/ItemEditViewController.xib; sourceTree = "<group>"; };
 		E38E44FC1575518C00FB0AF6 /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
 		E38E44FD1575518C00FB0AF6 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
 		E38E45331575592100FB0AF6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -127,6 +132,8 @@
 				E384E2AE15780D0000A90DDA /* ItemDetailViewController.m */,
 				E384E3B01578184800A90DDA /* TVTextEditCell.h */,
 				E384E3B11578184800A90DDA /* TVTextEditCell.m */,
+				E384E7C315792BDE00A90DDA /* ItemEditViewController.h */,
+				E384E7C415792BDE00A90DDA /* ItemEditViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -163,6 +170,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E384E7CF15792C0100A90DDA /* ItemEditViewController.xib */,
 				E384DEE21575990400A90DDA /* icon_lock.png */,
 				E384DEE31575990400A90DDA /* icon_refresh.png */,
 				E384DEE41575990400A90DDA /* icon_safe.png */,
@@ -243,6 +251,7 @@
 				E384DEE71575990400A90DDA /* icon_refresh.png in Resources */,
 				E384DEE81575990400A90DDA /* icon_safe.png in Resources */,
 				E384DEE91575990400A90DDA /* icon_settings.png in Resources */,
+				E384E7D015792C0100A90DDA /* ItemEditViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +277,7 @@
 				E384E1A01577FA9300A90DDA /* PWData.m in Sources */,
 				E384E2AF15780D0000A90DDA /* ItemDetailViewController.m in Sources */,
 				E384E3B21578184800A90DDA /* TVTextEditCell.m in Sources */,
+				E384E7C615792BDE00A90DDA /* ItemEditViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
