@@ -11,12 +11,13 @@
 
 @interface ItemEditViewController : UIViewController<UITextFieldDelegate, UITextViewDelegate> {
     PWItem *item_;
-    IBOutlet UITextField *titleField;
-    IBOutlet UITextField *loginField;
-    IBOutlet UITextField *passwordField;
-    IBOutlet UITextField *urlField;
-    IBOutlet UITextField *emailField;
-    IBOutlet UITextView *notesField;
+    IBOutlet UITextField *titleField_;
+    IBOutlet UITextField *loginField_;
+    IBOutlet UITextField *passwordField_;
+    IBOutlet UITextField *urlField_;
+    IBOutlet UITextField *emailField_;
+    IBOutlet UITextView *notesField_;
+    IBOutlet UINavigationBar *navBar_;
 }
 @property (nonatomic,retain) PWItem *item;
 @property (nonatomic,retain) IBOutlet UITextField *titleField;
@@ -25,5 +26,9 @@
 @property (nonatomic,retain) IBOutlet UITextField *urlField;
 @property (nonatomic,retain) IBOutlet UITextField *emailField;
 @property (nonatomic,retain) IBOutlet UITextView *notesField;
+@property (nonatomic,retain) IBOutlet UINavigationBar *navBar;
+
+-(IBAction)onSave:(UIBarButtonItem *)sender;
+-(IBAction)onCancel:(UIBarButtonItem *)sender;
 
 @end

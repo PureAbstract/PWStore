@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "ItemDetailViewController.h"
+#import "ItemEditViewController.h"
 
 @implementation RootViewController
 #pragma mark -
@@ -238,6 +239,12 @@
 
 -(void)onAddButton:(NSObject *)sender
 {
+    ItemEditViewController *controller = [ItemEditViewController new];
+    PWItem *newItem = [PWItem new];
+    controller.item = newItem;
+    [newItem release];
+    [self presentModalViewController:controller animated:YES];
+    [controller release];
 }
 #pragma mark -
 #pragma mark UISearchBarDelegate

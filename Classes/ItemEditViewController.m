@@ -13,12 +13,14 @@
 #pragma mark -
 #pragma mark Properties
 @synthesize item = item_;
-@synthesize titleField;
-@synthesize loginField;
-@synthesize passwordField;
-@synthesize urlField;
-@synthesize emailField;
-@synthesize notesField;
+@synthesize titleField = titleField_;
+@synthesize loginField = loginField_;
+@synthesize passwordField = passwordField_;
+@synthesize urlField = urlField_;
+@synthesize emailField = emailField_;
+@synthesize notesField = notesField_;
+@synthesize navBar = navBar_;
+
 #pragma mark -
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -36,20 +38,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     if( item_ ) {
-        titleField.text = item_.title;
-        loginField.text = item_.login;
-        passwordField.text = item_.password;
-        urlField.text = item_.url;
-        emailField.text = item_.email;
-        notesField.text = item_.notes;
+        titleField_.text = item_.title;
+        loginField_.text = item_.login;
+        passwordField_.text = item_.password;
+        urlField_.text = item_.url;
+        emailField_.text = item_.email;
+        notesField_.text = item_.notes;
 
     }
     // Magic...
-    notesField.layer.borderWidth = 1;
-    notesField.layer.borderColor = [[UIColor grayColor] CGColor];
-    notesField.layer.cornerRadius = 5;
+    notesField_.layer.borderWidth = 1;
+    notesField_.layer.borderColor = [[UIColor grayColor] CGColor];
+    notesField_.layer.cornerRadius = 5;
 
-    [titleField becomeFirstResponder];
+    [titleField_ becomeFirstResponder];
 }
 
 /*
@@ -63,7 +65,7 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
+
     // Release any cached data, images, etc. that aren't in use.
 }
 
@@ -77,16 +79,18 @@
     self.urlField = nil;
     self.emailField = nil;
     self.notesField = nil;
+    self.navBar = nil;
 }
 
 
 - (void)dealloc {
-    [self.titleField release];
-    [self.loginField release];
-    [self.passwordField release];
-    [self.urlField release];
-    [self.emailField release];
-    [self.notesField release];
+    [titleField_ release];
+    [loginField_ release];
+    [passwordField_ release];
+    [urlField_ release];
+    [emailField_ release];
+    [notesField_ release];
+    [navBar_ release];
     [item_ release];
     [super dealloc];
 }
@@ -106,6 +110,16 @@
     }
     return YES;
 }
+#pragma mark -
+#pragma mark Bar Button handlers
+-(IBAction)onSave:(UIBarButtonItem *)sender
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
 
+-(IBAction)onCancel:(UIBarButtonItem *)sender
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
 
 @end
