@@ -14,6 +14,60 @@
 #pragma mark Properties
 @synthesize data = data_;
 
+-(UISearchBar *)searchBar
+{
+    if( !searchBar_ ) {
+        searchBar_ = [[UISearchBar alloc] initWithFrame:CGRectMake( 0, 0,
+                                                                    self.tableView.bounds.size.width,
+                                                                    40 )];
+        searchBar_.delegate = self;
+        searchBar_.showsCancelButton = YES;
+    }
+    return searchBar_;
+}
+
+-(void)clearFilter
+{
+    if( filtered_ ) {
+        [filtered_ release];
+        filtered_ = nil;
+        [self.tableView reloadData];
+    }
+}
+
+-(void)applyFilter:(NSString *)text
+{
+    if( text && text.length ) {
+        [filtered_ release];
+        filtered_ = [NSMutableArray new];
+        for( PWItem *item in data_ ) {
+            NSString *title = item.title;
+            NSRange range = [title rangeOfString:text
+                                         options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch)];
+            if( range.location != NSNotFound ) {
+                [filtered_ addObject:item];
+            }
+        }
+        [self.tableView reloadData];
+    } else {
+        [self clearFilter];
+    }
+}
+
+-(void)showSearchBar:(BOOL)show
+{
+    if( show ) {
+        self.tableView.tableHeaderView = self.searchBar;
+        [searchBar_ becomeFirstResponder];
+    } else {
+        self.searchBar.text = @"";
+        self.tableView.tableHeaderView = nil;
+        [self clearFilter];
+    }
+}
+
+
+
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -22,10 +76,17 @@
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
-                                                                                           target:nil
-                                                                                           action:nil] autorelease];
+    //self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                            target:self
+                                                                            action:@selector(onAddButton:)];
+    self.navigationItem.rightBarButtonItem = button;
+    [button release];
+    button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
+                                                           target:self
+                                                           action:@selector(onSearchButton:)];
+    self.navigationItem.leftBarButtonItem = button;
+    [button release];
     self.title = NSLocalizedString(@"Data",nil);
 }
 
@@ -71,12 +132,25 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if( filtered_ ) {
+        return filtered_.count;
+    }
     if( data_ ) {
         return data_.count;
     }
     return 0;
 }
 
+-(PWItem *)getItemForIndex:(NSIndexPath *)indexPath
+{
+    if( filtered_ ) {
+        return [filtered_ objectAtIndex:indexPath.row];
+    }
+    if( data_ ) {
+        return [data_ objectAtIndex:indexPath.row];
+    }
+    return nil;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -89,7 +163,8 @@
     }
 
     // Configure the cell.
-    cell.textLabel.text = [data_ objectAtIndex:indexPath.row].title;
+    PWItem *item = [self getItemForIndex:indexPath];
+    cell.textLabel.text = item.title;
 
     return cell;
 }
@@ -154,6 +229,50 @@
     [controller release];
 }
 
+#pragma mark -
+#pragma mark Button Events
+-(void)onSearchButton:(NSObject *)sender
+{
+    [self showSearchBar:self.tableView.tableHeaderView==nil];
+}
+
+-(void)onAddButton:(NSObject *)sender
+{
+}
+#pragma mark -
+#pragma mark UISearchBarDelegate
+
+
+// // return NO to not become first responder
+// - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar;
+// // called when text starts editing
+// - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar;
+// // return NO to not resign first responder
+// - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar;
+// // called when text ends editing
+//- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar;
+// // called when text changes (including clear)
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [self applyFilter:searchText];
+}
+// // called before text changes
+// - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
+// // called when keyboard search button pressed
+// - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
+// // called when bookmark button pressed
+// - (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar;
+// // called when cancel button pressed
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
+{
+    [self showSearchBar:NO];
+}
+
+//  // called when search results button pressed
+// - (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar;
+
+// - (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope;
 
 #pragma mark -
 #pragma mark Memory management
@@ -172,6 +291,9 @@
 
 
 - (void)dealloc {
+    [filtered_ release];
+    [data_ release];
+    [searchBar_ release];
     [super dealloc];
 }
 

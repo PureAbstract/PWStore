@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "PWData.h"
-@interface RootViewController : UITableViewController {
+@interface RootViewController : UITableViewController<UISearchBarDelegate> {
     PWData *data_;
+    UISearchBar *searchBar_;
+    NSMutableArray *filtered_;
 }
 @property (nonatomic,retain) PWData *data;
+@property (nonatomic,readonly) UISearchBar *searchBar;
 @end
