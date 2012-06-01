@@ -34,13 +34,15 @@ static NSString *kPropKeyItems = @"i";
 
 #pragma mark -
 #pragma mark Data access
--(NSUInteger)count {
+-(NSUInteger)count
+{
     return [self.data count];
 }
 
 -(void)addObject:(PWItem *)item
 {
     NSAssert1( [item isKindOfClass:[PWItem class]], @"Expected a PWItem, got %@", item );
+    NSAssert( ![self containsObject:item], @"Object already present" );
     [self.data addObject:item];
     // TODO: Resort collection - notify observers
 }
@@ -50,6 +52,16 @@ static NSString *kPropKeyItems = @"i";
     NSObject *obj = [self.data objectAtIndex:index];
     NSAssert( [obj isKindOfClass:[PWItem class]], @"Expected PWItem" );
     return (PWItem *)obj;
+}
+
+-(BOOL)containsObject:(PWItem *)item
+{
+    return [self.data containsObject:item];
+}
+
+-(NSUInteger)indexOfObject:(PWItem *)item
+{
+    return [self.data indexOfObject:item];
 }
 
 

@@ -17,4 +17,6 @@
 -(NSUInteger)count;
 -(void)addObject:(PWItem *)item;
 -(PWItem *)objectAtIndex:(NSUInteger)index;
+-(BOOL)containsObject:(PWItem *)item;
+-(NSUInteger)indexOfObject:(PWItem *)item;
 @end
