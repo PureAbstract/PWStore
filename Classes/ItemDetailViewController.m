@@ -7,12 +7,24 @@
 //
 
 #import "ItemDetailViewController.h"
+#import "ItemEditViewController.h"
 
 @implementation ItemDetailViewController
 @synthesize item = item_;
 
 #pragma mark -
 #pragma mark Initialization
+
+enum {
+    kIndexTitle = 0,
+    kIndexLogin,
+    kIndexPassword,
+    kIndexUrl,
+    kIndexEmail,
+    kIndexNotes,
+
+    kIndexMax,
+};
 
 static NSString *cellLabels [] = {
     @"Title",
@@ -28,13 +40,6 @@ static NSString *cellLabels [] = {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if( self ) {
         self.item = item;
-        values_ = [[NSMutableArray alloc] initWithCapacity:6];
-        [values_ addObject:item.title];
-        [values_ addObject:item.login];
-        [values_ addObject:item.password];
-        [values_ addObject:item.url];
-        [values_ addObject:item.email];
-        [values_ addObject:item.notes];
     }
     return self;
 }
@@ -50,18 +55,38 @@ static NSString *cellLabels [] = {
 }
 */
 
+-(void)onEditSaved:(ItemEditViewController *)controller
+{
+    // Update the view
+    if( controller && controller.item ) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kPWDataUpdated
+                                                            object:controller.item];
+        [self.tableView reloadData];
+    }
+}
+
+-(void)onEdit:(UIBarButtonItem *)sender
+{
+    ItemEditViewController *controller = [[ItemEditViewController alloc] initWithItem:self.item
+                                                                               target:self
+                                                                               action:@selector(onEditSaved:)];
+    [self presentModalViewController:controller animated:YES];
+    [controller release];
+}
+
 
 #pragma mark -
 #pragma mark View lifecycle
 
-/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                                                                                            target:self
+                                                                                            action:@selector(onEdit:)] autorelease];
 }
-*/
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -97,7 +122,7 @@ static NSString *cellLabels [] = {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return values_.count;
+    return kIndexMax;
 }
 
 
@@ -120,7 +145,21 @@ static NSString *cellLabels [] = {
     // Configure the cell...
     NSUInteger itemIndex = indexPath.section;
     cell.tag = itemIndex;
-    cell.textLabel.text = (NSString *)[values_ objectAtIndex:itemIndex];
+    NSString *text = nil;
+    switch( itemIndex ) {
+    case kIndexTitle: text = item_.title; break;
+    case kIndexLogin: text = item_.login; break;
+    case kIndexPassword: text = item_.password; break;
+    case kIndexUrl: text = item_.url; break;
+    case kIndexEmail: text = item_.email; break;
+    case kIndexNotes: text = item_.notes; break;
+    default:
+        NSAssert( NO, @"Index out of range" );
+        text = @"";
+        break;
+    }
+
+    cell.textLabel.text = text;
     return cell;
 }
 
@@ -211,7 +250,6 @@ static NSString *cellLabels [] = {
 
 
 - (void)dealloc {
-    [values_ release];
     [item_ release];
     [super dealloc];
 }

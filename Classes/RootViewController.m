@@ -237,11 +237,21 @@
     [self showSearchBar:self.tableView.tableHeaderView==nil];
 }
 
+-(void)editViewSaved:(ItemEditViewController *)controller
+{
+    if( controller && controller.item ) {
+        // Save the new item..
+        [self.data addObject:controller.item];
+        [self.tableView reloadData];
+    }
+}
+
 -(void)onAddButton:(NSObject *)sender
 {
-    ItemEditViewController *controller = [ItemEditViewController new];
     PWItem *newItem = [PWItem new];
-    controller.item = newItem;
+    ItemEditViewController *controller = [[ItemEditViewController alloc] initWithItem:newItem
+                                                                               target:self
+                                                                               action:@selector(editViewSaved:)];
     [newItem release];
     [self presentModalViewController:controller animated:YES];
     [controller release];

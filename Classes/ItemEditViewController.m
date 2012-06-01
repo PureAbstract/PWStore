@@ -21,7 +21,43 @@
 @synthesize notesField = notesField_;
 @synthesize navBar = navBar_;
 
+
 #pragma mark -
+#pragma mark Item/Control data xfer
+// Put all this in one place for ease of maintainance...
+-(void)transferData:(BOOL)saveToItem {
+    if( item_ ) {
+        if( saveToItem ) {
+            item_.title = titleField_.text;
+            item_.login = loginField_.text;
+            item_.password = passwordField_.text;
+            item_.url = urlField_.text;
+            item_.email = emailField_.text;
+            item_.notes = notesField_.text;
+        } else {
+            titleField_.text = item_.title;
+            loginField_.text = item_.login;
+            passwordField_.text = item_.password;
+            urlField_.text = item_.url;
+            emailField_.text = item_.email;
+            notesField_.text = item_.notes;
+        }
+    }
+}
+#pragma mark -
+#pragma mark View lifecycle
+
+-(id)initWithItem:(PWItem *)item target:(id<NSObject>)target action:(SEL)action
+{
+    self = [super init];
+    if( self ) {
+        self.item = item;
+        target_ = target;
+        action_ = action;
+    }
+    return self;
+}
+
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*
@@ -37,20 +73,12 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if( item_ ) {
-        titleField_.text = item_.title;
-        loginField_.text = item_.login;
-        passwordField_.text = item_.password;
-        urlField_.text = item_.url;
-        emailField_.text = item_.email;
-        notesField_.text = item_.notes;
-
-    }
     // Magic...
     notesField_.layer.borderWidth = 1;
     notesField_.layer.borderColor = [[UIColor grayColor] CGColor];
     notesField_.layer.cornerRadius = 5;
 
+    [self transferData:NO];
     [titleField_ becomeFirstResponder];
 }
 
@@ -110,16 +138,35 @@
     }
     return YES;
 }
+
+#pragma mark -
+#pragma mark UITextViewDelegate
+// TODO: Scroll up here...
+//- (void)textViewDidBeginEditing:(UITextView *)textView;
+
+
+#pragma mark -
+#pragma mark Target
+-(void)endEditing:(BOOL)save
+{
+    if( target_ && action_ ) {
+        [target_ performSelector:action_ withObject:(save ? self : nil)];
+    }
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 #pragma mark -
 #pragma mark Bar Button handlers
 -(IBAction)onSave:(UIBarButtonItem *)sender
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self transferData:YES];
+    [self endEditing:YES];
 }
 
 -(IBAction)onCancel:(UIBarButtonItem *)sender
 {
-    [self dismissModalViewControllerAnimated:YES];
+    self.item = nil;
+    [self endEditing:NO];
 }
 
 @end

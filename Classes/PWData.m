@@ -39,12 +39,25 @@ static NSString *kPropKeyItems = @"i";
     return [self.data count];
 }
 
+-(void)sortByTitle
+{
+    [self.data sortUsingComparator:^(id obj1, id obj2 ) {
+            PWItem *p1 = (PWItem *)obj1;
+            PWItem *p2 = (PWItem *)obj2;
+            return [p1.title caseInsensitiveCompare:p2.title];
+        }];
+}
+
 -(void)addObject:(PWItem *)item
 {
     NSAssert1( [item isKindOfClass:[PWItem class]], @"Expected a PWItem, got %@", item );
     NSAssert( ![self containsObject:item], @"Object already present" );
     [self.data addObject:item];
-    // TODO: Resort collection - notify observers
+    // Resort... this probably isn't the best place to do it...
+    [self sortByTitle];
+    // TODO: notify anyone who cares
+    [[NSNotificationCenter defaultCenter] postNotificationName:kPWDataUpdated
+                                                        object:self];
 }
 
 -(PWItem *)objectAtIndex:(NSUInteger)index

@@ -18,6 +18,9 @@
     IBOutlet UITextField *emailField_;
     IBOutlet UITextView *notesField_;
     IBOutlet UINavigationBar *navBar_;
+
+    id<NSObject> target_;
+    SEL action_;
 }
 @property (nonatomic,retain) PWItem *item;
 @property (nonatomic,retain) IBOutlet UITextField *titleField;
@@ -28,7 +31,8 @@
 @property (nonatomic,retain) IBOutlet UITextView *notesField;
 @property (nonatomic,retain) IBOutlet UINavigationBar *navBar;
 
+-(id)initWithItem:(PWItem *)item target:(id<NSObject>)target action:(SEL)action;
+
 -(IBAction)onSave:(UIBarButtonItem *)sender;
 -(IBAction)onCancel:(UIBarButtonItem *)sender;
-
 @end

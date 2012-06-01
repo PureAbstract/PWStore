@@ -9,6 +9,10 @@
 #import "PWItem.h"
 #import "NSCoder+withDefaults.h"
 
+
+NSString * const kPWDataUpdated = @"kPWDataUpdated";
+
+
 #define kPropKeyTitle         @"t"
 #define kPropKeyLogin         @"l"
 #define kPropKeyPassword      @"p"

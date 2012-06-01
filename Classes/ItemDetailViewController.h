@@ -11,7 +11,6 @@
 
 @interface ItemDetailViewController : UITableViewController {
     PWItem *item_;
-    NSMutableArray *values_;
 }
 @property (nonatomic,retain) PWItem *item;
 -(id)initWithItem:(PWItem *)item;

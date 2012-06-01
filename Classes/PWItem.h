@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const kPWDataUpdated;
+
 @interface PWItem : NSObject<NSCoding> {
     // Note: It may be a better plan to store these as an array,
     // with specified indices.
