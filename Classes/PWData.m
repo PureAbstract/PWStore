@@ -40,7 +40,7 @@ static NSString *kPropKeyItems = @"i";
 
 -(void)addObject:(PWItem *)item
 {
-    NSAssert( [item isKindOfClass:[PWItem class]], @"Expected a PWItem, got %@", item );
+    NSAssert1( [item isKindOfClass:[PWItem class]], @"Expected a PWItem, got %@", item );
     [self.data addObject:item];
     // TODO: Resort collection - notify observers
 }
