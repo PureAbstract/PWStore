@@ -31,8 +31,8 @@ enum {
 @synthesize pwitems = pwitems_;
 
 
-static NSString *kMasterPWSalt = @"pwsalt";
-static NSString *kMasterPWHash = @"pwhash";
+static NSString * const kMasterPWSalt = @"pwsalt";
+static NSString * const kMasterPWHash = @"pwhash";
 
 #pragma mark -
 #pragma mark Master Password

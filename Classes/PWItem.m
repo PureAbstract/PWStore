@@ -13,14 +13,14 @@
 NSString * const kPWDataUpdated = @"kPWDataUpdated";
 
 
-#define kPropKeyTitle         @"t"
-#define kPropKeyLogin         @"l"
-#define kPropKeyPassword      @"p"
-#define kPropKeyEmail         @"e"
-#define kPropKeyUrl           @"u"
-#define kPropKeyNotes         @"n"
-#define kPropKeyCreated       @"c"
-#define kPropKeyUpdated       @"m"
+static NSString * const kPropKeyTitle    = @"t";
+static NSString * const kPropKeyLogin    = @"l";
+static NSString * const kPropKeyPassword = @"p";
+static NSString * const kPropKeyEmail    = @"e";
+static NSString * const kPropKeyUrl      = @"u";
+static NSString * const kPropKeyNotes    = @"n";
+static NSString * const kPropKeyCreated  = @"c";
+static NSString * const kPropKeyUpdated  = @"m";
 
 enum {
     kItemPropTitle,
