@@ -39,20 +39,20 @@ enum {
 @synthesize window = window_;
 @synthesize navigationController = navigationController_;
 @synthesize tabBarController = tabBarController_;
-@synthesize password = password_;
+@synthesize masterPassword = masterPassword_;
 @synthesize pwitems = pwitems_;
 
 -(BOOL)isLocked
 {
-    // Note: Is may be possible to ditch this locked_ flag, and check for password_ == nil?
+    // Note: Is may be possible to ditch this locked_ flag, and check for masterPassword_ == nil?
     return locked_;
 }
 
 -(NSData *)encryptionKey
 {
-    NSAssert( password_, @"NULL Password" );
-    NSAssert( password_.length > 0, @"Empty password" );
-    return [password_ asDataUTF8];
+    NSAssert( masterPassword_, @"NULL Password" );
+    NSAssert( masterPassword_.length > 0, @"Empty password" );
+    return [masterPassword_ asDataUTF8];
 }
 
 #pragma mark -
@@ -62,7 +62,7 @@ enum {
     if( self.isLocked ) {
         return;
     }
-    self.password = nil;
+    self.masterPassword = nil;
     MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
     mpv.delegate = self;
     mpv.mode = kMasterPasswordEnterMode;
@@ -240,7 +240,7 @@ enum {
     if( ![self checkMasterPassword:pw] ) {
         return NO;
     }
-    self.password = pw;
+    self.masterPassword = pw;
     [self.tabBarController dismissModalViewControllerAnimated:YES];
     locked_ = NO;
     self.pwitems = [self getData];
@@ -406,7 +406,7 @@ enum {
     [tabBarController_ release];
     [navigationController_ release];
     [window_ release];
-    [password_ release];
+    [masterPassword_ release];
     [pwitems_ release];
     [super dealloc];
 }

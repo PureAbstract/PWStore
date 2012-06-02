@@ -16,7 +16,7 @@
     UIWindow *window_;
     UINavigationController *navigationController_;
     UITabBarController *tabBarController_;
-    NSString *password_;
+    NSString *masterPassword_;
     PWData *pwitems_;
     BOOL locked_;               // The MasterPasswordViewController is displayed.
 }
@@ -24,7 +24,7 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
-@property (nonatomic, copy) NSString *password;
+@property (nonatomic, copy) NSString *masterPassword;
 @property (nonatomic, retain) PWData *pwitems;
 @end
 
