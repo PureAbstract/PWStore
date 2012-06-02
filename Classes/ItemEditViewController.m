@@ -58,6 +58,12 @@
     return self;
 }
 
++(id)controllerForItem:(PWItem *)item target:(id<NSObject>)target action:(SEL)action
+{
+    ItemEditViewController *controller = [[ItemEditViewController alloc] initWithItem:item target:target action:action];
+    [controller autorelease];
+    return controller;
+}
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 /*

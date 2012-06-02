@@ -32,6 +32,8 @@
 @property (nonatomic,retain) IBOutlet UINavigationBar *navBar;
 
 -(id)initWithItem:(PWItem *)item target:(id<NSObject>)target action:(SEL)action;
++(id)controllerForItem:(PWItem *)item target:(id<NSObject>)target action:(SEL)action;
+
 
 -(IBAction)onSave:(UIBarButtonItem *)sender;
 -(IBAction)onCancel:(UIBarButtonItem *)sender;
