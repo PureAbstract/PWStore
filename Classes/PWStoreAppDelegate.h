@@ -18,6 +18,7 @@
     UITabBarController *tabBarController_;
     NSString *password_;
     PWData *pwitems_;
+    BOOL locked_;               // The MasterPasswordViewController is displayed.
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;

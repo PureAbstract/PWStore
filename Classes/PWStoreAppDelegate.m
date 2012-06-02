@@ -34,14 +34,23 @@ enum {
 static NSString * const kMasterPWSalt = @"pwsalt";
 static NSString * const kMasterPWHash = @"pwhash";
 
+-(BOOL)isLocked
+{
+    return locked_;
+}
+
 #pragma mark -
 #pragma mark Master Password
 -(void)showMasterPasswordControllerAnimated:(BOOL)animated
 {
+    if( self.isLocked ) {
+        return;
+    }
     self.password = nil;
     MasterPasswordViewController *mpv = [[MasterPasswordViewController alloc] init];
     mpv.delegate = self;
     mpv.mode = kMasterPasswordEnterMode;
+    locked_ = YES;
     [self.tabBarController presentModalViewController:mpv animated:animated];
     [mpv release];
 }
@@ -216,6 +225,7 @@ static NSString * const kMasterPWHash = @"pwhash";
     }
     self.password = pw;
     [self.tabBarController dismissModalViewControllerAnimated:YES];
+    locked_ = NO;
     self.pwitems = [self getData];
     [self saveData];            // FIXME
     if( navigationController_ ) {
@@ -232,6 +242,17 @@ static NSString * const kMasterPWHash = @"pwhash";
     return YES;
 }
 
+// Called when we get a notification that data has been changed
+-(void)dataUpdated:(NSNotification *)notification
+{
+    // Check we're unlocked.
+    if( password_ && !self.isLocked ) {
+        [self saveData];
+    } else {
+        NSAssert( password_, @"data update while null password" );
+        NSAssert( !self.isLocked, @"data update while locked" );
+    }
+}
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -285,6 +306,11 @@ static NSString * const kMasterPWHash = @"pwhash";
         [c release];
     }
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dataUpdated:)
+                                                 name:kPWDataUpdated
+                                               object:nil];
+
     tabBarController_.viewControllers = tabBarControllers;
 
     // Add the navigation controller's view to the window and display.
@@ -301,6 +327,7 @@ static NSString * const kMasterPWHash = @"pwhash";
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
+    [self showMasterPasswordController];
 }
 
 
@@ -309,6 +336,7 @@ static NSString * const kMasterPWHash = @"pwhash";
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
+    [self showMasterPasswordController];
 }
 
 
@@ -316,6 +344,7 @@ static NSString * const kMasterPWHash = @"pwhash";
     /*
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
+    [self showMasterPasswordController];
 }
 
 
@@ -323,6 +352,7 @@ static NSString * const kMasterPWHash = @"pwhash";
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    [self showMasterPasswordController];
 }
 
 
