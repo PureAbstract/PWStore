@@ -42,7 +42,7 @@
 {
     self = [super init];
     if( self ) {
-        targets = [NSMutableArray array];
+        targets = [NSMutableArray new];
     }
     return self;
 }
