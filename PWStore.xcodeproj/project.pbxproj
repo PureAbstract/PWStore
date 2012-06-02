@@ -39,6 +39,8 @@
 		E38E47491575725E00FB0AF6 /* MasterPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E38E47461575725E00FB0AF6 /* MasterPasswordViewController.xib */; };
 		E38E474A1575725E00FB0AF6 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E38E47471575725E00FB0AF6 /* RootViewController.xib */; };
 		E3994E3D157A7E1F001CE6D3 /* ModalAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = E3994E3C157A7E1F001CE6D3 /* ModalAlert.m */; };
+		E3994FE1157AAA5E001CE6D3 /* PWItem+StringExport.m in Sources */ = {isa = PBXBuildFile; fileRef = E3994FE0157AAA5E001CE6D3 /* PWItem+StringExport.m */; };
+		E3995065157AB505001CE6D3 /* PWData+StringExport.m in Sources */ = {isa = PBXBuildFile; fileRef = E3995064157AB505001CE6D3 /* PWData+StringExport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +98,10 @@
 		E38E47471575725E00FB0AF6 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RootViewController.xib; path = Resources/RootViewController.xib; sourceTree = "<group>"; };
 		E3994E3B157A7E1F001CE6D3 /* ModalAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalAlert.h; sourceTree = "<group>"; };
 		E3994E3C157A7E1F001CE6D3 /* ModalAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlert.m; sourceTree = "<group>"; };
+		E3994FDF157AAA5E001CE6D3 /* PWItem+StringExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PWItem+StringExport.h"; sourceTree = "<group>"; };
+		E3994FE0157AAA5E001CE6D3 /* PWItem+StringExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PWItem+StringExport.m"; sourceTree = "<group>"; };
+		E3995063157AB505001CE6D3 /* PWData+StringExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PWData+StringExport.h"; sourceTree = "<group>"; };
+		E3995064157AB505001CE6D3 /* PWData+StringExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PWData+StringExport.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +201,10 @@
 				E38E45C315755B8F00FB0AF6 /* PWItem.m */,
 				E384E19E1577FA9300A90DDA /* PWData.h */,
 				E384E19F1577FA9300A90DDA /* PWData.m */,
+				E3994FDF157AAA5E001CE6D3 /* PWItem+StringExport.h */,
+				E3994FE0157AAA5E001CE6D3 /* PWItem+StringExport.m */,
+				E3995063157AB505001CE6D3 /* PWData+StringExport.h */,
+				E3995064157AB505001CE6D3 /* PWData+StringExport.m */,
 			);
 			name = "Data Model";
 			sourceTree = "<group>";
@@ -358,6 +368,8 @@
 				E3595A9B157A6BAF005FDA20 /* EventTargets.m in Sources */,
 				E3595B5A157A7510005FDA20 /* NSMutableArray+Utility.m in Sources */,
 				E3994E3D157A7E1F001CE6D3 /* ModalAlert.m in Sources */,
+				E3994FE1157AAA5E001CE6D3 /* PWItem+StringExport.m in Sources */,
+				E3995065157AB505001CE6D3 /* PWData+StringExport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
