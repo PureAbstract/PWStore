@@ -38,6 +38,7 @@
 		E38E47481575725E00FB0AF6 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = E38E47451575725E00FB0AF6 /* MainWindow.xib */; };
 		E38E47491575725E00FB0AF6 /* MasterPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E38E47461575725E00FB0AF6 /* MasterPasswordViewController.xib */; };
 		E38E474A1575725E00FB0AF6 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E38E47471575725E00FB0AF6 /* RootViewController.xib */; };
+		E3994E3D157A7E1F001CE6D3 /* ModalAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = E3994E3C157A7E1F001CE6D3 /* ModalAlert.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,8 @@
 		E38E47451575725E00FB0AF6 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Resources/MainWindow.xib; sourceTree = "<group>"; };
 		E38E47461575725E00FB0AF6 /* MasterPasswordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MasterPasswordViewController.xib; path = Resources/MasterPasswordViewController.xib; sourceTree = "<group>"; };
 		E38E47471575725E00FB0AF6 /* RootViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = RootViewController.xib; path = Resources/RootViewController.xib; sourceTree = "<group>"; };
+		E3994E3B157A7E1F001CE6D3 /* ModalAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalAlert.h; sourceTree = "<group>"; };
+		E3994E3C157A7E1F001CE6D3 /* ModalAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalAlert.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +242,8 @@
 				E384E2AE15780D0000A90DDA /* ItemDetailViewController.m */,
 				E384E7C315792BDE00A90DDA /* ItemEditViewController.h */,
 				E384E7C415792BDE00A90DDA /* ItemEditViewController.m */,
+				E3994E3B157A7E1F001CE6D3 /* ModalAlert.h */,
+				E3994E3C157A7E1F001CE6D3 /* ModalAlert.m */,
 			);
 			name = "User Interface";
 			sourceTree = "<group>";
@@ -352,6 +357,7 @@
 				E359581F157A4864005FDA20 /* TVSwitchCell.m in Sources */,
 				E3595A9B157A6BAF005FDA20 /* EventTargets.m in Sources */,
 				E3595B5A157A7510005FDA20 /* NSMutableArray+Utility.m in Sources */,
+				E3994E3D157A7E1F001CE6D3 /* ModalAlert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -98,7 +98,13 @@
     }
 
     // Configure the cell...
-    cell.textLabel.text = NSLocalizedString(@"A Setting",nil);
+    if( ( indexPath.section == 0 ) && ( indexPath.row == 0 ) ) {
+        cell.textLabel.text = NSLocalizedString(@"Clear Master Password",nil);
+        cell.textLabel.textColor = [UIColor redColor];
+    } else {
+        cell.textLabel.text = NSLocalizedString(@"A Setting",nil);
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
 
     return cell;
 }
@@ -165,6 +171,12 @@
 {
     NSIndexPath *path = [self.tableView indexPathForCell:cell];
     NSLog(@"Cell at %@ changed - %d",path,cell.isOn);
+    if( ( path.section == 0 ) && ( path.row == 0 ) ) {
+        // Reset master PW - Should prompt for confirmation!
+        // DON'T DO THIS - things Will Go Bad!
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pwhash"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pwsalt"];
+    }
 }
 
 #pragma mark -
