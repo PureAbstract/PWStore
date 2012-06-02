@@ -36,6 +36,7 @@ static NSString * const kMasterPWHash = @"pwhash";
 
 -(BOOL)isLocked
 {
+    // Note: Is may be possible to ditch this locked_ flag, and check for password_ == nil?
     return locked_;
 }
 
@@ -246,11 +247,10 @@ static NSString * const kMasterPWHash = @"pwhash";
 -(void)dataUpdated:(NSNotification *)notification
 {
     // Check we're unlocked.
-    if( password_ && !self.isLocked ) {
-        [self saveData];
+    if( self.isLocked ) {
+        NSAssert( NO, @"data update while locked" );
     } else {
-        NSAssert( password_, @"data update while null password" );
-        NSAssert( !self.isLocked, @"data update while locked" );
+        [self saveData];
     }
 }
 
