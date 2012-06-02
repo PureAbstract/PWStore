@@ -31,14 +31,6 @@
     return self;
 }
 
-
-#pragma mark -
-#pragma mark View Lifecycle
--(void)viewDidUnload
-{
-    [super viewDidUnload];
-    self.switchControl = nil;
-}
 #pragma mark -
 #pragma mark Memory Management
 - (void)dealloc {
