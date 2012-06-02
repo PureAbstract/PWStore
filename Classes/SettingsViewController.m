@@ -79,7 +79,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 1;
+    return 2;
 }
 
 
@@ -91,8 +91,10 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         //cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell = [[[TVSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                    reuseIdentifier:CellIdentifier] autorelease];
+        TVSwitchCell *swCell = [[[TVSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                    reuseIdentifier:CellIdentifier] autorelease];
+        [swCell addTarget:self action:@selector(onSwitchChanged:)];
+        cell = swCell;
     }
 
     // Configure the cell...
@@ -156,6 +158,14 @@
     */
 }
 
+
+#pragma mark -
+#pragma mark Cell Changed handler
+-(void)onSwitchChanged:(TVSwitchCell *)cell
+{
+    NSIndexPath *path = [self.tableView indexPathForCell:cell];
+    NSLog(@"Cell at %@ changed - %d",path,cell.isOn);
+}
 
 #pragma mark -
 #pragma mark Memory management
