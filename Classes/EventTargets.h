@@ -17,6 +17,7 @@
 @property (nonatomic,readonly) id target;
 @property (nonatomic,readonly) SEL action;
 -(id)initWithTarget:(id)target action:(SEL)action;
+-(void)sendAction;
 -(void)sendActionWithObject:(id)object;
 
 @end
@@ -26,5 +27,6 @@
 }
 -(void)addTarget:(id)target action:(SEL)action;
 -(void)removeTarget:(id)target action:(SEL)action;
+-(void)sendActions;
 -(void)sendActionsWithObject:(id)object;
 @end

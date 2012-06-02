@@ -25,6 +25,11 @@
     return self;
 }
 
+-(void)sendAction
+{
+    [target_ performSelector:action_];
+}
+
 -(void)sendActionWithObject:(id)object
 {
     [target_ performSelector:action_ withObject:object];
@@ -73,11 +78,14 @@
     [targets removeObjectsAtIndexes:toRemove];
 }
 
+-(void)sendActions
+{
+    [targets makeObjectsPerformSelector:@selector(sendAction)];
+}
+
 -(void)sendActionsWithObject:(id)object
 {
-    for( EventTarget *tgt in targets ) {
-        [tgt sendActionWithObject:object];
-    }
+    [targets makeObjectsPerformSelector:@selector(sendActionWithObject:) withObject:object];
 }
 
 @end
