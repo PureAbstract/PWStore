@@ -107,38 +107,11 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
-				28C286E00D94DF7D0034E888 /* RootViewController.m */,
-				1D3623240D0F684500981E51 /* PWStoreAppDelegate.h */,
-				1D3623250D0F684500981E51 /* PWStoreAppDelegate.m */,
-				E38E44FC1575518C00FB0AF6 /* NSData+AES.h */,
-				E38E44FD1575518C00FB0AF6 /* NSData+AES.m */,
-				E38E45C215755B8F00FB0AF6 /* PWItem.h */,
-				E38E45C315755B8F00FB0AF6 /* PWItem.m */,
-				E38E466B1575674600FB0AF6 /* MasterPasswordViewController.h */,
-				E38E466C1575674600FB0AF6 /* MasterPasswordViewController.m */,
-				E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */,
-				E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */,
-				E384DF0615759B7200A90DDA /* SettingsViewController.h */,
-				E384DF0715759B7200A90DDA /* SettingsViewController.m */,
-				E384DF2615759C3500A90DDA /* SyncViewController.h */,
-				E384DF2715759C3500A90DDA /* SyncViewController.m */,
-				E384E0181575A94B00A90DDA /* UIApplication+Utility.h */,
-				E384E0191575A94B00A90DDA /* UIApplication+Utility.m */,
-				E384E0651575B15900A90DDA /* NSString+Utility.h */,
-				E384E0661575B15900A90DDA /* NSString+Utility.m */,
-				E384E10B1576B27100A90DDA /* UIViewController+TabBarItem.h */,
-				E384E10C1576B27100A90DDA /* UIViewController+TabBarItem.m */,
-				E384E19E1577FA9300A90DDA /* PWData.h */,
-				E384E19F1577FA9300A90DDA /* PWData.m */,
-				E384E2AD15780D0000A90DDA /* ItemDetailViewController.h */,
-				E384E2AE15780D0000A90DDA /* ItemDetailViewController.m */,
-				E384E3B01578184800A90DDA /* TVTextEditCell.h */,
-				E384E3B11578184800A90DDA /* TVTextEditCell.m */,
-				E384E7C315792BDE00A90DDA /* ItemEditViewController.h */,
-				E384E7C415792BDE00A90DDA /* ItemEditViewController.m */,
-				E359581D157A4864005FDA20 /* TVSwitchCell.h */,
-				E359581E157A4864005FDA20 /* TVSwitchCell.m */,
+				E35958EF157A582D005FDA20 /* User Interface */,
+				E35958EE157A581D005FDA20 /* App Delegate */,
+				E35958ED157A5807005FDA20 /* Categories */,
+				E35958EC157A57F6005FDA20 /* Data Model */,
+				E35958EB157A57E7005FDA20 /* Table View Cells */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -175,14 +148,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E384E7CF15792C0100A90DDA /* ItemEditViewController.xib */,
-				E384DEE21575990400A90DDA /* icon_lock.png */,
-				E384DEE31575990400A90DDA /* icon_refresh.png */,
-				E384DEE41575990400A90DDA /* icon_safe.png */,
-				E384DEE51575990400A90DDA /* icon_settings.png */,
-				E38E47451575725E00FB0AF6 /* MainWindow.xib */,
-				E38E47461575725E00FB0AF6 /* MasterPasswordViewController.xib */,
-				E38E47471575725E00FB0AF6 /* RootViewController.xib */,
+				E35958F1157A5851005FDA20 /* User Interface */,
+				E35958F0157A5842005FDA20 /* Images */,
 				8D1107310486CEB800E47090 /* PWStore-Info.plist */,
 			);
 			name = Resources;
@@ -197,6 +164,95 @@
 				E38E45331575592100FB0AF6 /* Security.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E35958EB157A57E7005FDA20 /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E384E3B01578184800A90DDA /* TVTextEditCell.h */,
+				E384E3B11578184800A90DDA /* TVTextEditCell.m */,
+				E359581D157A4864005FDA20 /* TVSwitchCell.h */,
+				E359581E157A4864005FDA20 /* TVSwitchCell.m */,
+			);
+			name = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		E35958EC157A57F6005FDA20 /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				E38E45C215755B8F00FB0AF6 /* PWItem.h */,
+				E38E45C315755B8F00FB0AF6 /* PWItem.m */,
+				E384E19E1577FA9300A90DDA /* PWData.h */,
+				E384E19F1577FA9300A90DDA /* PWData.m */,
+			);
+			name = "Data Model";
+			sourceTree = "<group>";
+		};
+		E35958ED157A5807005FDA20 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				E38E44FC1575518C00FB0AF6 /* NSData+AES.h */,
+				E38E44FD1575518C00FB0AF6 /* NSData+AES.m */,
+				E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */,
+				E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */,
+				E384E0181575A94B00A90DDA /* UIApplication+Utility.h */,
+				E384E0191575A94B00A90DDA /* UIApplication+Utility.m */,
+				E384E0651575B15900A90DDA /* NSString+Utility.h */,
+				E384E0661575B15900A90DDA /* NSString+Utility.m */,
+				E384E10B1576B27100A90DDA /* UIViewController+TabBarItem.h */,
+				E384E10C1576B27100A90DDA /* UIViewController+TabBarItem.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		E35958EE157A581D005FDA20 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623240D0F684500981E51 /* PWStoreAppDelegate.h */,
+				1D3623250D0F684500981E51 /* PWStoreAppDelegate.m */,
+			);
+			name = "App Delegate";
+			sourceTree = "<group>";
+		};
+		E35958EF157A582D005FDA20 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				E38E466B1575674600FB0AF6 /* MasterPasswordViewController.h */,
+				E38E466C1575674600FB0AF6 /* MasterPasswordViewController.m */,
+				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
+				28C286E00D94DF7D0034E888 /* RootViewController.m */,
+				E384DF2615759C3500A90DDA /* SyncViewController.h */,
+				E384DF2715759C3500A90DDA /* SyncViewController.m */,
+				E384DF0615759B7200A90DDA /* SettingsViewController.h */,
+				E384DF0715759B7200A90DDA /* SettingsViewController.m */,
+				E384E2AD15780D0000A90DDA /* ItemDetailViewController.h */,
+				E384E2AE15780D0000A90DDA /* ItemDetailViewController.m */,
+				E384E7C315792BDE00A90DDA /* ItemEditViewController.h */,
+				E384E7C415792BDE00A90DDA /* ItemEditViewController.m */,
+			);
+			name = "User Interface";
+			sourceTree = "<group>";
+		};
+		E35958F0157A5842005FDA20 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				E384DEE21575990400A90DDA /* icon_lock.png */,
+				E384DEE31575990400A90DDA /* icon_refresh.png */,
+				E384DEE41575990400A90DDA /* icon_safe.png */,
+				E384DEE51575990400A90DDA /* icon_settings.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		E35958F1157A5851005FDA20 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				E38E47451575725E00FB0AF6 /* MainWindow.xib */,
+				E38E47471575725E00FB0AF6 /* RootViewController.xib */,
+				E38E47461575725E00FB0AF6 /* MasterPasswordViewController.xib */,
+				E384E7CF15792C0100A90DDA /* ItemEditViewController.xib */,
+			);
+			name = "User Interface";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
