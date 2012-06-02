@@ -7,6 +7,7 @@
 //
 
 #import "EventTargets.h"
+#import "NSMutableArray+Utility.h"
 
 @implementation EventTarget
 @synthesize target = target_;
@@ -63,7 +64,7 @@
 
 -(void)removeTarget:(id)target action:(SEL)action
 {
-    NSIndexSet *toRemove = [targets indexesOfObjectsPassingTest:^(id obj, NSUInteger index, BOOL *stop ) {
+    [targets removeObjectsPassingTest:^(id obj, NSUInteger index, BOOL *stop ) {
             EventTarget *tgt = (EventTarget *)obj;
             if( tgt.target == target ) {
                 if( !action ) {
@@ -75,7 +76,6 @@
             }
             return NO;
         }];
-    [targets removeObjectsAtIndexes:toRemove];
 }
 
 -(void)sendActions
