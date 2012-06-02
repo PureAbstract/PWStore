@@ -17,27 +17,42 @@
 #import "NSString+Utility.h"
 #import "UIViewController+TabBarItem.h"
 
+#pragma mark -
+#pragma mark Constants
+// Keys for NSUserDefaults
+static NSString * const kMasterPWSalt = @"pwsalt";
+static NSString * const kMasterPWHash = @"pwhash";
+
 enum {
+    // Number of bytes of random data to add to the actual data before
+    // encryption.  The idea being that repeatedly encrypting the same
+    // plaintext with the same key gives you a different ciphertext.
     kSaltLength = 16,
+    // tag id of the 'Lockscreen' controller (which isn't really a
+    // view controller)
     kLockController = 1041,
 };
 
 @implementation PWStoreAppDelegate
-
+#pragma mark -
+#pragma mark Properties
 @synthesize window = window_;
 @synthesize navigationController = navigationController_;
 @synthesize tabBarController = tabBarController_;
 @synthesize password = password_;
 @synthesize pwitems = pwitems_;
 
-
-static NSString * const kMasterPWSalt = @"pwsalt";
-static NSString * const kMasterPWHash = @"pwhash";
-
 -(BOOL)isLocked
 {
     // Note: Is may be possible to ditch this locked_ flag, and check for password_ == nil?
     return locked_;
+}
+
+-(NSData *)encryptionKey
+{
+    NSAssert( password_, @"NULL Password" );
+    NSAssert( password_.length > 0, @"Empty password" );
+    return [password_ asDataUTF8];
 }
 
 #pragma mark -
@@ -59,13 +74,6 @@ static NSString * const kMasterPWHash = @"pwhash";
 -(void)showMasterPasswordController
 {
     [self showMasterPasswordControllerAnimated:NO];
-}
-
--(NSData *)encryptionKey
-{
-    NSAssert( password_, @"NULL Password" );
-    NSAssert( password_.length > 0, @"Empty password" );
-    return [password_ asDataUTF8];
 }
 
 #pragma mark -
@@ -193,6 +201,7 @@ static NSString * const kMasterPWHash = @"pwhash";
     // NOTE - this is TOTALLY BOGUS
     // We're saving an SHA256 hash of the master pw in the user defaults.
     // That isn't a good idea - but will sort of do for now.
+    // At the very least, we should do multiple rounds of hashing.
     NSData *savedhash = [[NSUserDefaults standardUserDefaults] dataForKey:kMasterPWHash];
     NSData *savedsalt = [[NSUserDefaults standardUserDefaults] dataForKey:kMasterPWSalt];
     NSData *pwdata = [check asDataUTF8];
