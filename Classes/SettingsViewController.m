@@ -7,7 +7,7 @@
 //
 
 #import "SettingsViewController.h"
-
+#import "TVSwitchCell.h"
 
 @implementation SettingsViewController
 
@@ -90,7 +90,9 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        //cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[TVSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                    reuseIdentifier:CellIdentifier] autorelease];
     }
 
     // Configure the cell...

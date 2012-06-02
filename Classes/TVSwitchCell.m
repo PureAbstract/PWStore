@@ -20,17 +20,25 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code.
-        CGRect frame = CGRectMake(198.0, 12.0, 94.0, 27.0); // Straigth out of UICatalog sample...
+        CGRect frame = CGRectMake(198.0, 12.0, 94.0, 27.0); // Straight out of UICatalog sample...
         switchControl_ = [[UISwitch alloc] initWithFrame:frame];
         switchControl_.backgroundColor = [UIColor clearColor];
         [switchControl_ addTarget:self
                            action:@selector(switchAction:)
                  forControlEvents:UIControlEventValueChanged];
-        [self.contentView addSubview:switchControl_];
+        self.accessoryView = switchControl_;
     }
     return self;
 }
 
+
+#pragma mark -
+#pragma mark View Lifecycle
+-(void)viewDidUnload
+{
+    [super viewDidUnload];
+    self.switchControl = nil;
+}
 #pragma mark -
 #pragma mark Memory Management
 - (void)dealloc {
