@@ -13,6 +13,24 @@
 #pragma mark Properties
 @synthesize switchControl = switchControl_;
 
+-(BOOL)isOn
+{
+    return switchControl_.isOn;
+}
+
+-(void)setOn:(BOOL)on
+{
+    switchControl_.on = on;
+}
+
+-(EventTargets *)targets
+{
+    if( !targets_ ) {
+        targets_ = [EventTargets new];
+    }
+    return targets_;
+}
+
 #pragma mark -
 #pragma mark Initialisation
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -31,9 +49,26 @@
     return self;
 }
 
+-(void)addTarget:(id<NSObject>)target action:(SEL)action
+{
+    [self.targets addTarget:target action:action];
+}
+
+-(void)removeTarget:(id<NSObject>)target action:(SEL)action
+{
+    if( targets_ ) {
+        [targets_ removeTarget:targets_ action:action];
+    }
+}
+
+
 #pragma mark -
 #pragma mark Memory Management
 - (void)dealloc {
+    [targets_ release];
+    [switchControl_ removeTarget:self
+                          action:NULL
+                forControlEvents:UIControlEventAllEvents];
     [switchControl_ release];
     [super dealloc];
 }
@@ -53,6 +88,11 @@
 -(void)switchAction:(id)sender
 {
     // Switch was changed
+    NSAssert( sender == switchControl_, @"Unexpected sender" );
+    BOOL state = switchControl_.isOn;
+    if( targets_ ) {
+        [targets_ sendActionsWithObject:self];
+    }
 }
 
 @end
