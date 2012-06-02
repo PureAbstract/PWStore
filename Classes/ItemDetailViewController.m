@@ -67,11 +67,10 @@ static NSString *cellLabels [] = {
 
 -(void)onEdit:(UIBarButtonItem *)sender
 {
-    ItemEditViewController *controller = [[ItemEditViewController alloc] initWithItem:self.item
-                                                                               target:self
-                                                                               action:@selector(onEditSaved:)];
-    [self presentModalViewController:controller animated:YES];
-    [controller release];
+    [self presentModalViewController:[ItemEditViewController controllerForItem:self.item
+                                                                        target:self
+                                                                        action:@selector(onEditSaved:)]
+                            animated:YES];
 }
 
 

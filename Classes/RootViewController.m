@@ -76,6 +76,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onDataUpdated:)
+                                                 name:kPWDataUpdated
+                                               object:nil];
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     //self.navigationItem.rightBarButtonItem = self.editButtonItem;
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
@@ -230,6 +234,15 @@
     [controller release];
 }
 
+
+#pragma mark -
+#pragma mark Notifications
+-(void)onDataUpdated:(NSNotification *)notification
+{
+    // This is a bit brute force...
+    [self.tableView reloadData];
+}
+
 #pragma mark -
 #pragma mark Button Events
 -(void)onSearchButton:(NSObject *)sender
@@ -249,12 +262,11 @@
 -(void)onAddButton:(NSObject *)sender
 {
     PWItem *newItem = [PWItem new];
-    ItemEditViewController *controller = [[ItemEditViewController alloc] initWithItem:newItem
-                                                                               target:self
-                                                                               action:@selector(editViewSaved:)];
+    ItemEditViewController *controller = [ItemEditViewController controllerForItem:newItem
+                                                                            target:self
+                                                                            action:@selector(editViewSaved:)];
     [newItem release];
     [self presentModalViewController:controller animated:YES];
-    [controller release];
 }
 #pragma mark -
 #pragma mark UISearchBarDelegate
