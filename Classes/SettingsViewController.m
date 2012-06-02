@@ -8,6 +8,7 @@
 
 #import "SettingsViewController.h"
 #import "TVSwitchCell.h"
+#import "ModalAlert.h"
 
 @implementation SettingsViewController
 
@@ -174,8 +175,13 @@
     if( ( path.section == 0 ) && ( path.row == 0 ) ) {
         // Reset master PW - Should prompt for confirmation!
         // DON'T DO THIS - things Will Go Bad!
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pwhash"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pwsalt"];
+        if( [ModalAlert showWithTitle:NSLocalizedString(@"Really reset password?",nil)] ) {
+            NSLog(@"Modal Yes");
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pwhash"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pwsalt"];
+        } else {
+            NSLog(@"Modal No");
+        }
     }
 }
 
