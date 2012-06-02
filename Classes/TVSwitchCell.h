@@ -11,7 +11,7 @@
 
 @interface TVSwitchCell : UITableViewCell {
     UISwitch *switchControl_;
-    EventTargets *targets_;
+    EventTargets *eventTargets_;
 }
 @property (nonatomic,retain) IBOutlet UISwitch *switchControl;
 // For convenience - forwards to switchControl

@@ -23,12 +23,12 @@
     switchControl_.on = on;
 }
 
--(EventTargets *)targets
+-(EventTargets *)eventTargets
 {
-    if( !targets_ ) {
-        targets_ = [EventTargets new];
+    if( !eventTargets_ ) {
+        eventTargets_ = [EventTargets new];
     }
-    return targets_;
+    return eventTargets_;
 }
 
 #pragma mark -
@@ -51,13 +51,13 @@
 
 -(void)addTarget:(id<NSObject>)target action:(SEL)action
 {
-    [self.targets addTarget:target action:action];
+    [self.eventTargets addTarget:target action:action];
 }
 
 -(void)removeTarget:(id<NSObject>)target action:(SEL)action
 {
-    if( targets_ ) {
-        [targets_ removeTarget:targets_ action:action];
+    if( eventTargets_ ) {
+        [eventTargets_ removeTarget:target action:action];
     }
 }
 
@@ -65,7 +65,7 @@
 #pragma mark -
 #pragma mark Memory Management
 - (void)dealloc {
-    [targets_ release];
+    [eventTargets_ release];
     [switchControl_ removeTarget:self
                           action:NULL
                 forControlEvents:UIControlEventAllEvents];
@@ -87,11 +87,10 @@
 #pragma mark Switch cell events
 -(void)switchAction:(id)sender
 {
-    // Switch was changed
+    // Switch was changed; tell the world.
     NSAssert( sender == switchControl_, @"Unexpected sender" );
-    BOOL state = switchControl_.isOn;
-    if( targets_ ) {
-        [targets_ sendActionsWithObject:self];
+    if( eventTargets_ ) {
+        [eventTargets_ sendActionsWithObject:self];
     }
 }
 
