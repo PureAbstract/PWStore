@@ -15,6 +15,7 @@
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		E359581F157A4864005FDA20 /* TVSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E359581E157A4864005FDA20 /* TVSwitchCell.m */; };
 		E3595A9B157A6BAF005FDA20 /* EventTargets.m in Sources */ = {isa = PBXBuildFile; fileRef = E3595A9A157A6BAF005FDA20 /* EventTargets.m */; };
+		E3595B5A157A7510005FDA20 /* NSMutableArray+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = E3595B59157A7510005FDA20 /* NSMutableArray+Utility.m */; };
 		E384DD6B157582C400A90DDA /* NSCoder+withDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */; };
 		E384DEE61575990400A90DDA /* icon_lock.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE21575990400A90DDA /* icon_lock.png */; };
 		E384DEE71575990400A90DDA /* icon_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = E384DEE31575990400A90DDA /* icon_refresh.png */; };
@@ -55,6 +56,8 @@
 		E359581E157A4864005FDA20 /* TVSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVSwitchCell.m; sourceTree = "<group>"; };
 		E3595A99157A6BAF005FDA20 /* EventTargets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTargets.h; sourceTree = "<group>"; };
 		E3595A9A157A6BAF005FDA20 /* EventTargets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTargets.m; sourceTree = "<group>"; };
+		E3595B58157A7510005FDA20 /* NSMutableArray+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Utility.h"; sourceTree = "<group>"; };
+		E3595B59157A7510005FDA20 /* NSMutableArray+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Utility.m"; sourceTree = "<group>"; };
 		E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCoder+withDefaults.h"; sourceTree = "<group>"; };
 		E384DD6A157582C400A90DDA /* NSCoder+withDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCoder+withDefaults.m"; sourceTree = "<group>"; };
 		E384DEE21575990400A90DDA /* icon_lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_lock.png; path = Resources/icon_lock.png; sourceTree = "<group>"; };
@@ -206,6 +209,8 @@
 				E384E0661575B15900A90DDA /* NSString+Utility.m */,
 				E384E10B1576B27100A90DDA /* UIViewController+TabBarItem.h */,
 				E384E10C1576B27100A90DDA /* UIViewController+TabBarItem.m */,
+				E3595B58157A7510005FDA20 /* NSMutableArray+Utility.h */,
+				E3595B59157A7510005FDA20 /* NSMutableArray+Utility.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -346,6 +351,7 @@
 				E384E7C615792BDE00A90DDA /* ItemEditViewController.m in Sources */,
 				E359581F157A4864005FDA20 /* TVSwitchCell.m in Sources */,
 				E3595A9B157A6BAF005FDA20 /* EventTargets.m in Sources */,
+				E3595B5A157A7510005FDA20 /* NSMutableArray+Utility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
