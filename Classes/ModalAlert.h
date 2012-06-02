@@ -13,4 +13,5 @@
 
 }
 +(BOOL) showWithTitle:(NSString *)title;
++(BOOL) showWithTitle:(NSString *)title okButton:(NSString *)ok cancelButton:(NSString *)cancel;
 @end

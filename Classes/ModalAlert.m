@@ -8,6 +8,7 @@
 
 #import "ModalAlert.h"
 
+// TODO: Need to close this gracefully if the application terminates
 @interface ModalAlertDelegate : NSObject<UIAlertViewDelegate>
 {
     CFRunLoopRef runLoop_;
@@ -16,16 +17,21 @@
 @property (readonly) NSUInteger result;
 @end
 
+
 @implementation ModalAlertDelegate
 @synthesize result = result_;
-
--(id)init
+-(id)initWithRunLoop:(CFRunLoopRef)runLoop
 {
     self = [super init];
     if( self ) {
-        runLoop_ = CFRunLoopGetCurrent();
+        runLoop_ = runLoop;
     }
     return self;
+}
+
+-(id)init
+{
+    return [self initWithRunLoop:CFRunLoopGetCurrent()];
 }
 
 -(void)alertView:(UIAlertView *)view clickedButtonAtIndex:(NSInteger)index
@@ -37,20 +43,26 @@
 
 
 @implementation ModalAlert
-
-+(BOOL)showWithTitle:(NSString *)title
++(BOOL) showWithTitle:(NSString *)title okButton:(NSString *)ok cancelButton:(NSString *)cancel
 {
     ModalAlertDelegate *delegate = [ModalAlertDelegate new];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:nil
                                                    delegate:delegate
-                                          cancelButtonTitle:NSLocalizedString(@"Cancel",nil)
-                                          otherButtonTitles:NSLocalizedString(@"Ok",nil),nil];
+                                          cancelButtonTitle:cancel
+                                          otherButtonTitles:ok,nil];
     [alert show];
     CFRunLoopRun();
     BOOL result = ( delegate.result != alert.cancelButtonIndex );
     [alert release];
     [delegate release];
     return result;
+}
+
++(BOOL)showWithTitle:(NSString *)title
+{
+    return [self showWithTitle:title
+                      okButton:NSLocalizedString(@"Ok",nil)
+                  cancelButton:NSLocalizedString(@"Cancel",nil)];
 }
 @end
