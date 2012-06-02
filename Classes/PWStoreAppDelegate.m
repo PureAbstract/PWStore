@@ -197,17 +197,23 @@ static NSString * const kMasterPWHash = @"pwhash";
     NSData *savedsalt = [[NSUserDefaults standardUserDefaults] dataForKey:kMasterPWSalt];
     NSData *pwdata = [check asDataUTF8];
     if( savedhash && savedsalt ) {
+        // We already have a saved master password.
+        // So hash the newly entered one with the salt...
         NSMutableData *buffer= [NSMutableData dataWithCapacity:pwdata.length+savedsalt.length];
         [buffer appendData:pwdata];
         [buffer appendData:savedsalt];
         NSData *pwhash = [buffer sha256];
+        // And compare it with the saved one
         return [pwhash isEqualToData:savedhash];
     } else {
+        // No saved data, so generate some salt...
         savedsalt = [NSData randomBytes:kSaltLength];
+        // hash it with the password
         NSMutableData *buffer = [NSMutableData dataWithCapacity:pwdata.length+savedsalt.length];
         [buffer appendData:pwdata];
         [buffer appendData:savedsalt];
         NSData *pwhash = [buffer sha256];
+        // Save the results
         [[NSUserDefaults standardUserDefaults] setObject:savedsalt forKey:kMasterPWSalt];
         [[NSUserDefaults standardUserDefaults] setObject:pwhash forKey:kMasterPWHash];
     }
