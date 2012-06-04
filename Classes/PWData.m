@@ -48,16 +48,29 @@ static NSString *kPropKeyItems = @"i";
         }];
 }
 
--(void)addObject:(PWItem *)item
+-(void)notifyChanges
 {
-    NSAssert1( [item isKindOfClass:[PWItem class]], @"Expected a PWItem, got %@", item );
-    NSAssert( ![self containsObject:item], @"Object already present" );
-    [self.data addObject:item];
-    // Resort... this probably isn't the best place to do it...
-    [self sortByTitle];
-    // TODO: notify anyone who cares
     [[NSNotificationCenter defaultCenter] postNotificationName:kPWDataUpdated
                                                         object:self];
+}
+
+-(void)addObject:(PWItem *)item
+{
+    [self addObjectsFromArray:[NSArray arrayWithObject:item]];
+}
+
+-(void)addObjectsFromArray:(NSArray *)array
+{
+    if( array.count ) {
+        for( NSObject *object in array ) {
+            NSAssert( [object isKindOfClass:[PWItem class]],@"Expected a PWItem");
+            PWItem *item = (PWItem *)object;
+            NSAssert( ![self containsObject:item],@"Object already present");
+            [self.data addObject:item];
+        }
+        [self sortByTitle];
+        [self notifyChanges];
+    }
 }
 
 -(PWItem *)objectAtIndex:(NSUInteger)index
@@ -65,6 +78,17 @@ static NSString *kPropKeyItems = @"i";
     NSObject *obj = [self.data objectAtIndex:index];
     NSAssert( [obj isKindOfClass:[PWItem class]], @"Expected PWItem" );
     return (PWItem *)obj;
+}
+
+-(void)removeObjectAtIndex:(NSUInteger)index
+{
+    [self removeObjectsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+}
+
+-(void)removeObjectsAtIndexes:(NSIndexSet *)indexes
+{
+    [self.data removeObjectsAtIndexes:indexes];
+    [self notifyChanges];
 }
 
 -(BOOL)containsObject:(PWItem *)item

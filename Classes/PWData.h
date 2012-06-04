@@ -16,7 +16,10 @@
 // Number of items in collection
 -(NSUInteger)count;
 -(void)addObject:(PWItem *)item;
+-(void)addObjectsFromArray:(NSArray *)array;
 -(PWItem *)objectAtIndex:(NSUInteger)index;
 -(BOOL)containsObject:(PWItem *)item;
 -(NSUInteger)indexOfObject:(PWItem *)item;
+-(void)removeObjectAtIndex:(NSUInteger)index;
+-(void)removeObjectsAtIndexes:(NSIndexSet *)indexes;
 @end
