@@ -1,12 +1,12 @@
 //
-//  XmlWrapper.m
+//  XmlDocument.m
 //  PWStore
 //
 //  Created by Andy Sawyer on 04/06/2012.
 //  Copyright 2012 Andy Sawyer. All rights reserved.
 //
 
-#import "XmlWrapper.h"
+#import "XmlDocument.h"
 #import <libxml/parser.h>
 #import <libxml/xpath.h>
 #import <libxml/xmlwriter.h>
@@ -92,7 +92,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     return (xmlNodePtr)nodePtr_;
 }
 
--(NSString *)name 
+-(NSString *)name
 {
     return stringFromXmlString( self.nodePtr->name );
 }
@@ -109,7 +109,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 -(void)setContent:(NSString *)content
 {
-    xmlNodeSetContent( self.nodePtr, 
+    xmlNodeSetContent( self.nodePtr,
                        content ? xmlStringFromString( content ) : NULL );
 }
 
@@ -164,15 +164,15 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 @end
 
 #pragma mark -
-#pragma mark XmlWrapper private interface
-@interface XmlWrapper ()
+#pragma mark XmlDocument private interface
+@interface XmlDocument ()
 @property (nonatomic,readonly) xmlDocPtr docPtr;
 @end
 
 #pragma mark -
-#pragma mark XmlWrapper implementation
+#pragma mark XmlDocument implementation
 
-@implementation XmlWrapper
+@implementation XmlDocument
 #pragma mark -
 #pragma mark Class Init
 +(void)load
@@ -226,7 +226,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 +(id)xmlWithData:(NSData *)data
 {
-    XmlWrapper *xml = [[[XmlWrapper alloc] initWithData:data] autorelease];
+    XmlDocument *xml = [[[XmlDocument alloc] initWithData:data] autorelease];
     if( !xml ) {
         NSLog(@"xmlWithData: failed");
     }

@@ -3,13 +3,13 @@
 //  PWStore
 //
 //  Created by Andy Sawyer on 04/06/2012.
-//  Copyright 2012 __MyCompanyName__. All rights reserved.
+//  Copyright 2012 Andy Sawyer. All rights reserved.
 //
 
 #import "SyncViewController+TestDriver.h"
 #import "PWData.h"
 #import "UIApplication+Utility.h"
-#import "XmlWrapper.h"
+#import "XmlDocument.h"
 #import "PWStoreAppDelegate.h"
 
 
@@ -41,7 +41,7 @@
     if( [[NSFileManager defaultManager] fileExistsAtPath:import] ) {
         NSData *data = [NSData dataWithContentsOfFile:import];
         if( data ) {
-            XmlWrapper *xml = [XmlWrapper xmlWithData:data];
+            XmlDocument *xml = [XmlDocument xmlWithData:data];
             NSAssert( xml, @"failed to load xml" );
             if( xml ) {
                 NSArray *results = [xml xpathQuery:@"//root/item"];
@@ -76,7 +76,7 @@
 
 -(void)testXmlExport
 {
-    XmlWrapper *xml = [[XmlWrapper alloc] init];
+    XmlDocument *xml = [[XmlDocument alloc] init];
     PWData *data = [self getRootData];
     for( PWItem *item in data ) {
         XmlNode *node = [xml.rootNode addChildNode:@"item"];

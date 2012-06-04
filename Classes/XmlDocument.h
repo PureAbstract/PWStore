@@ -1,5 +1,5 @@
 //
-//  XmlWrapper.h
+//  XmlDocument.h
 //  PWStore
 //
 //  Created by Andy Sawyer on 04/06/2012.
@@ -24,7 +24,7 @@
 -(void)setAttribute:(NSString *)name value:(NSString *)value;
 @end
 
-@interface XmlWrapper : NSObject {
+@interface XmlDocument : NSObject {
     void *docPtr_;              // xmlDocPtr
 }
 @property (readonly) XmlNode *rootNode;
