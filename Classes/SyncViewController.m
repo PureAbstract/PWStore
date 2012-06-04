@@ -7,6 +7,7 @@
 //
 
 #import "SyncViewController.h"
+#import "SyncViewController+TestDriver.h"
 
 enum {
     kRowFtpUpload,
@@ -176,7 +177,14 @@ enum {
     [detailViewController release];
     */
     if( indexPath.section == 0 ) {
-        // Do things
+        switch( indexPath.row ) {
+        case kRowXmlImport:
+            [self testXmlImport];
+            break;
+        case kRowXmlExport:
+            [self testXmlExport];
+            break;
+        }
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

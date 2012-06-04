@@ -43,6 +43,7 @@
 		E3995065157AB505001CE6D3 /* PWData+StringExport.m in Sources */ = {isa = PBXBuildFile; fileRef = E3995064157AB505001CE6D3 /* PWData+StringExport.m */; };
 		E3995282157CEAD7001CE6D3 /* XmlWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E3995281157CEAD7001CE6D3 /* XmlWrapper.m */; };
 		E3995284157CEAE7001CE6D3 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E3995283157CEAE7001CE6D3 /* libxml2.dylib */; };
+		E3C91235157D3ACC0055AAD6 /* SyncViewController+TestDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C91234157D3ACC0055AAD6 /* SyncViewController+TestDriver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +108,8 @@
 		E3995280157CEAD7001CE6D3 /* XmlWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlWrapper.h; sourceTree = "<group>"; };
 		E3995281157CEAD7001CE6D3 /* XmlWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmlWrapper.m; sourceTree = "<group>"; };
 		E3995283157CEAE7001CE6D3 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		E3C91233157D3ACC0055AAD6 /* SyncViewController+TestDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SyncViewController+TestDriver.h"; sourceTree = "<group>"; };
+		E3C91234157D3ACC0055AAD6 /* SyncViewController+TestDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SyncViewController+TestDriver.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +266,8 @@
 				E384E7C415792BDE00A90DDA /* ItemEditViewController.m */,
 				E3994E3B157A7E1F001CE6D3 /* ModalAlert.h */,
 				E3994E3C157A7E1F001CE6D3 /* ModalAlert.m */,
+				E3C91233157D3ACC0055AAD6 /* SyncViewController+TestDriver.h */,
+				E3C91234157D3ACC0055AAD6 /* SyncViewController+TestDriver.m */,
 			);
 			name = "User Interface";
 			sourceTree = "<group>";
@@ -380,6 +385,7 @@
 				E3994FE1157AAA5E001CE6D3 /* PWItem+StringExport.m in Sources */,
 				E3995065157AB505001CE6D3 /* PWData+StringExport.m in Sources */,
 				E3995282157CEAD7001CE6D3 /* XmlWrapper.m in Sources */,
+				E3C91235157D3ACC0055AAD6 /* SyncViewController+TestDriver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

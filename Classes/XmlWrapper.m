@@ -7,16 +7,216 @@
 //
 
 #import "XmlWrapper.h"
+#import <libxml/parser.h>
 #import <libxml/xpath.h>
+#import <libxml/xmlwriter.h>
+
+#pragma mark -
+#pragma mark Utility Functions
+static NSString *stringFromXmlString( const xmlChar *p ) {
+    if( p ) {
+        return [NSString stringWithUTF8String:(const char *)p];
+    } else {
+        return [NSString string];
+    }
+}
+
+static const xmlChar *xmlStringFromString( NSString *s ) {
+    return (const xmlChar *)[s UTF8String];
+}
+
+typedef void (^nodeTraversal)( xmlNodePtr node, BOOL *stop );
+static void traverseNodeList( xmlNodePtr node, nodeTraversal func )
+{
+    BOOL stop = NO;
+    while( node && !stop ) {
+        func( node, &stop );
+        node = node->next;
+    }
+}
+
+typedef void (^attrTraversal)( xmlAttrPtr attr, BOOL *stop );
+static void traverseAttrList( xmlAttrPtr attr, attrTraversal func )
+{
+    BOOL stop = NO;
+    while( attr && !stop ) {
+        func( attr, &stop );
+        attr = attr->next;
+    }
+}
+
+
+static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    traverseAttrList( attribute, ^(xmlAttrPtr attr, BOOL *stop) {
+            NSString *name = stringFromXmlString( attr->name );
+            NSString *value = nil;
+            xmlNodePtr p = attr->children;
+            if( p && p->content ) {
+                value = stringFromXmlString( p->content );
+            }
+            if( !value ) {
+                value = [NSString string];
+            }
+            [dict setObject:value forKey:name];
+        } );
+    return dict;
+}
+
+@interface XmlNode ()
+@property (readonly) xmlNodePtr nodePtr;
+@end
+
+@implementation XmlNode
+#pragma mark -
+#pragma mark Initialisation
+-(id)initWithNode:(xmlNodePtr)node
+{
+    self = [super init];
+    if( self ) {
+        nodePtr_ = node;
+    }
+    return self;
+}
+
++(id)nodeForNode:(xmlNodePtr)node
+{
+    return [[[XmlNode alloc] initWithNode:node] autorelease];
+}
+
+#pragma mark -
+#pragma mark Properties
+-(xmlNodePtr)nodePtr
+{
+    NSAssert( nodePtr_, @"NULL nodePtr" );
+    return (xmlNodePtr)nodePtr_;
+}
+
+-(NSString *)name 
+{
+    return stringFromXmlString( self.nodePtr->name );
+}
+
+-(NSDictionary *)attributes
+{
+    return dictionaryFromAttributes( self.nodePtr->properties );
+}
+
+-(NSString *)content
+{
+    return self.nodePtr->content ? stringFromXmlString( self.nodePtr->content ) : nil;
+}
+
+-(void)setContent:(NSString *)content
+{
+    xmlNodeSetContent( self.nodePtr, 
+                       content ? xmlStringFromString( content ) : NULL );
+}
+
+-(NSArray *)childNodes
+{
+    NSMutableArray *children = [NSMutableArray array];
+
+    traverseNodeList( self.nodePtr->children, ^( xmlNodePtr child, BOOL *stop ) {
+            [children addObject:[XmlNode nodeForNode:child]];
+        });
+
+    return children;
+}
+
+#pragma mark -
+#pragma mark Methods
+-(XmlNode *)childWithName:(NSString *)name
+{
+    for( XmlNode *node in self.childNodes ) {
+        if( [name isEqualToString:node.name] ) {
+            return node;
+        }
+    }
+    return nil;
+}
+
+-(XmlNode *)addChildNode:(NSString *)name content:(NSString *)content
+{
+    xmlNodePtr node = xmlNewChild( self.nodePtr,
+                                   NULL,
+                                   xmlStringFromString( name ),
+                                   content ? xmlStringFromString( content ) : NULL
+                                   );
+    if( node ) {
+        return [XmlNode nodeForNode:node];
+    }
+    return nil;
+}
+
+
+-(XmlNode *)addChildNode:(NSString *)name
+{
+    return [self addChildNode:name content:nil];
+}
+
+-(void)addAttribute:(NSString *)name value:(NSString *)value
+{
+    xmlNewProp( self.nodePtr,
+                xmlStringFromString( name ),
+                value ? xmlStringFromString( value ) : NULL );
+}
+@end
+
+#pragma mark -
+#pragma mark XmlWrapper private interface
+@interface XmlWrapper ()
+@property (nonatomic,readonly) xmlDocPtr docPtr;
+@end
+
+#pragma mark -
+#pragma mark XmlWrapper implementation
 
 @implementation XmlWrapper
+#pragma mark -
+#pragma mark Class Init
++(void)load
+{
+    xmlInitParser();
+}
+
+#pragma mark -
+#pragma mark Properties
+-(xmlDocPtr)docPtr
+{
+    NSAssert( docPtr_, @"Null DocPtr" );
+    return (xmlDocPtr)docPtr_;
+}
+
+-(XmlNode *)rootNode
+{
+    return [XmlNode nodeForNode:self.docPtr->children];
+}
+
+#pragma mark -
+#pragma mark Initialisation
+-(id)init
+{
+    self = [super init];
+    if( self ) {
+        xmlDocPtr doc = xmlNewDoc( (xmlChar *)"1.0" );
+        docPtr_ = doc;
+        // Hack... stuff in a root node called 'root'
+        xmlNodePtr root = xmlNewNode( NULL, (xmlChar *)"root" );
+        NSAssert( root, @"Null root" );
+        xmlDocSetRootElement( doc, root );
+    }
+    return self;
+}
+
 -(id)initWithData:(NSData *)data
 {
     self = [super init];
     if( self ) {
-        docPtr_ = xmlReadMemory( data.bytes, data.length,
-                                 "", NULL, XML_PARSE_RECOVER );
-        if( !docPtr_ ) {
+        xmlDocPtr doc = xmlReadMemory( data.bytes, data.length,
+                                        "", NULL, XML_PARSE_RECOVER );
+        docPtr_ = doc;
+        if( !doc ) {
             NSLog(@"Error parsing xml");
             return nil;
         }
@@ -33,20 +233,24 @@
     return xml;
 }
 
+
+#pragma mark -
+#pragma mark XPath Query
 -(NSArray *)xpathQuery:(NSString *)xpath
 {
-    if( !docPtr_ ) {
-        NSAssert( docPtr_, @"xpathQuery on null doc" );
+    xmlDocPtr doc = self.docPtr;
+    if( !doc ) {
+        NSAssert( NO, @"xpathQuery on null doc" );
         return nil;
     }
 
-    xmlXPathContextPtr context = xmlXPathNewContext(docPtr_);
+    xmlXPathContextPtr context = xmlXPathNewContext(doc);
     if( !context ) {
         NSAssert( context, @"Can't create XPath context" );
         return nil;
     }
 
-    xmlXPathObjectPtr xobj = xmlXPathEvalExpression( (xmlChar *)[xpath cStringUsingEncoding:NSUTF8StringEncoding],
+    xmlXPathObjectPtr xobj = xmlXPathEvalExpression( xmlStringFromString( xpath ),
                                                      context );
     if( !xobj ) {
         NSLog(@"Unable to evaluate query");
@@ -61,35 +265,7 @@
     } else {
         for( NSInteger i = 0 ; i < nodeSet->nodeNr ; ++i ) {
             xmlNodePtr node = nodeSet->nodeTab[i];
-            // node->type; // element type enum
-            // node->name; // element name string
-            // node->properties; // xmlAttr -> list of properties
-            NSMutableDictionary *props = [NSMutableDictionary dictionary];
-            xmlAttrPtr prop = node->properties;
-            while( prop ) {
-                NSString *name = [NSString stringWithUTF8String:(const char *)prop->name];
-                // TODO: Figure this out...
-                xmlNodePtr val = prop->children;
-                NSString *value = nil;
-                if( val ) {
-                    xmlChar *content = val->content;
-                    if( content ) {
-                        value = [NSString stringWithUTF8String:(const char *)content];
-                    }
-                }
-                if( !value ) {
-                    value = [NSString string];
-                }
-                prop = prop->next;
-            }
-            // ... and a bunch of other stuff...
-            NSDictionary *nodeDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                       [NSString stringWithUTF8String:(const char *)node->name],@"name",
-                                                       [NSNumber numberWithInteger:node->type],@"type",
-                                                         props,@"properties",
-                                                       nil];
-            [results addObject:nodeDictionary];
-            // Do stuff
+            [results addObject:[XmlNode nodeForNode:node]];
         }
     }
     xmlXPathFreeObject( xobj );
@@ -97,11 +273,30 @@
     return results;
 }
 
+#pragma mark -
+#pragma mark Write to String
+-(NSString *)toString
+{
+    NSString *result = nil;
+    xmlChar *buf = NULL;
+    int size = 0;
+    xmlDocDumpFormatMemory( self.docPtr, &buf, &size, 0 );
+    result = stringFromXmlString( buf );
+    xmlFree( buf );
+    return result;
+}
+
+
+#pragma mark -
+#pragma mark Memory Management
 -(void)dealloc
 {
-    if( docPtr_ ) {
-        xmlFreeDoc( docPtr_ );
+    xmlDocPtr doc = self.docPtr;
+    docPtr_ = NULL;
+    if( doc ) {
+        xmlFreeDoc( doc );
     }
     [super dealloc];
 }
 @end
+

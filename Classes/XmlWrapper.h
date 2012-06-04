@@ -7,14 +7,33 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <libxml/parser.h>
+
+@interface XmlNode : NSObject {
+    void *nodePtr_;             // xmlNodePtr
+}
+@property (nonatomic,readonly) NSString *name;
+@property (nonatomic,copy) NSString *content;
+
+-(NSArray *)childNodes;
+-(NSDictionary *)attributes;
+
+-(XmlNode *)addChildNode:(NSString *)name;
+-(XmlNode *)addChildNode:(NSString *)name content:(NSString *)content;
+
+-(void)addAttribute:(NSString *)name value:(NSString *)value;
+@end
 
 @interface XmlWrapper : NSObject {
-    xmlDocPtr docPtr_;
+    void *docPtr_;              // xmlDocPtr
 }
+@property (readonly) XmlNode *rootNode;
+-(id)init;
 -(id)initWithData:(NSData *)data;
 +(id)xmlWithData:(NSData *)data;
 
 -(NSArray *)xpathQuery:(NSString *)xpath;
 
+-(NSString *)toString;
+
 @end
+
