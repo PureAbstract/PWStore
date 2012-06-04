@@ -8,6 +8,11 @@
 
 #import "SyncViewController.h"
 
+enum {
+    kRowFtpUpload,
+    kRowFtpDownload,
+    kRowCount,
+};
 
 @implementation SyncViewController
 
@@ -79,7 +84,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 2;
+    return kRowCount;
 }
 
 
@@ -95,8 +100,15 @@
 
     // Configure the cell...
     switch( indexPath.row ) {
-    case 0: cell.textLabel.text = NSLocalizedString(@"FTP Upload",nil); break;
-    case 1: cell.textLabel.text = NSLocalizedString(@"FTP Download",nil); break;
+    case kRowFtpDownload:
+        cell.textLabel.text = NSLocalizedString(@"FTP Download",nil);
+        break;
+    case kRowFtpUpload:
+        cell.textLabel.text = NSLocalizedString(@"FTP Upload",nil);
+        break;
+    default:
+        cell.textLabel.text = [NSString stringWithFormat:@"%@",indexPath];
+        break;
     }
 
     return cell;
@@ -155,6 +167,10 @@
     [self.navigationController pushViewController:detailViewController animated:YES];
     [detailViewController release];
     */
+    if( indexPath.section == 0 ) {
+        // Do things
+    }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -180,4 +196,3 @@
 
 
 @end
-
