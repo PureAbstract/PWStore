@@ -78,45 +78,46 @@ enum {
 
 #pragma mark -
 #pragma mark Test data
+-(NSData *)encryptData:(NSData *)data
+{
+    return [data encryptWithKey:[self encryptionKey]
+                     saltLength:kSaltLength];
+}
+
+-(NSData *)decryptData:(NSData *)data
+{
+    return [data decryptWithKey:[self encryptionKey]
+                     saltLength:kSaltLength];
+}
 
 -(NSString *)defaultFile
 {
     return [UIApplication documentPath:@"default.dat"];
 }
 
--(void)saveDataInFile:(NSString *)filename
+-(BOOL)saveDataInFile:(NSString *)filename
 {
-    NSData *key = [self encryptionKey];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pwitems_];
-    NSData *enc = [data encryptWithKey:key
-                            saltLength:kSaltLength];
-    NSAssert( enc, @"Encryption problem" );
-    // VERIFY
-    NSData *dec = [enc decryptWithKey:key
-                           saltLength:kSaltLength];
-    NSAssert( dec, @"Decryption problem" );
-    NSAssert( [dec isEqualToData:data], @"Encryption mismatch" );
-    // END VERIFY
+    NSData *enc = [self encryptData:data];
+    if( !enc ) {
+        NSAssert( enc, @"Encryption problem" );
+        return NO;
+    }
     NSError *error = nil;
     if( ![enc writeToFile:filename
                   options:(NSDataWritingAtomic|NSDataWritingFileProtectionComplete)
                     error:&error] ) {
         NSLog(@"Error saving file %@",error);
+        return NO;
     }
     if( error ) {
         NSAssert( error == nil, @"Error saving file" );
+        return NO;
     }
-    // VERIFY
-    NSData *load = [NSData dataWithContentsOfFile:filename];
-    NSAssert( load, @"Load error");
-    NSAssert( [load isEqualToData:enc], @"Load mismatch" );
-    NSData *ldec = [enc decryptWithKey:key
-                           saltLength:kSaltLength];
-    NSAssert( [ldec isEqualToData:data], @"Decrypt mismatch" );
-    // END VERIFY
+    return YES;
 }
 
--(void)saveData
+-(BOOL)saveData
 {
     NSString *filename = [self defaultFile];
     return [self saveDataInFile:filename];
@@ -133,8 +134,7 @@ enum {
         NSLog(@"Failed to load from file");
         return nil;
     }
-    NSData *dec = [load decryptWithKey:[self encryptionKey]
-                            saltLength:kSaltLength];
+    NSData *dec = [self decryptData:load];
     if( !dec ) {
         NSLog(@"Decryption error");
         return nil;
