@@ -169,28 +169,6 @@ enum {
         return data;
     }
     data = [[[PWData alloc] init] autorelease];
-#ifdef TEST_DATA
-    // Just some data for testing
-    PWItem *pw = [PWItem new];
-    pw.title = @"Title";
-    pw.login = @"Login";
-    pw.password = @"Password";
-    pw.url = @"URL";
-    pw.email = @"spamtrap@pureabstract.org";
-    pw.notes = @"Notes and \n more notes";
-    [data addObject:pw];
-    [pw release];
-
-    pw = [PWItem new];
-    pw.title = @"Other Title";
-    pw.login = @"other login";
-    pw.password = @"Another password";
-    pw.url = @"The URL";
-    pw.email = @"devnull@example.com";
-    pw.notes = @"Notes on this item";
-    [data addObject:pw];
-    [pw release];
-#endif
     return data;
 }
 
