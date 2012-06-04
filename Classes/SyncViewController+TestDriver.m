@@ -38,39 +38,50 @@
 -(void)testXmlImport
 {
     NSString *import = [UIApplication documentPath:@"import.xml"];
-    if( [[NSFileManager defaultManager] fileExistsAtPath:import] ) {
-        NSData *data = [NSData dataWithContentsOfFile:import];
-        if( data ) {
-            XmlDocument *xml = [XmlDocument xmlWithData:data];
-            NSAssert( xml, @"failed to load xml" );
-            if( xml ) {
-                NSArray *results = [xml xpathQuery:@"//root/item"];
-                if( results ) {
-                    for( XmlNode *node in results ) {
-                        NSLog(@"node : %@", node.name);
-                        for( XmlNode *child in node.childNodes ) {
-                            NSLog(@"child: %@",child.name);
-                        }
-                        NSDictionary *attributes = node.attributes;
-                        for( NSString *attr in attributes ) {
-                            NSLog(@"attr: %@=%@",attr,[attributes objectForKey:attr]);
-                        }
-                        PWItem *item = [PWItem new];
-                        item.title = [self getStringFromDictionary:attributes forKey:@"name"];
-                        item.login = [self getStringFromDictionary:attributes forKey:@"user"];
-                        item.password = [self getStringFromDictionary:attributes forKey:@"pass"];
-                        item.url = [self getStringFromDictionary:attributes forKey:@"url"];
-                        item.email = [self getStringFromDictionary:attributes forKey:@"email"];
-                        XmlNode *notes = [node childWithName:@"notes"];
-                        if( notes && notes.content ) {
-                            item.notes = notes.content;
-                        }
-                        [[self getRootData] addObject:item];
-                        [item release];
-                    }
-                }
-            }
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:import] ) {
+        NSLog(@"file not found %@",import);
+        return;
+    }
+
+    NSData *data = [NSData dataWithContentsOfFile:import];
+    if( !data ) {
+        NSLog(@"dataWithContentsOfFile failed");
+        return;
+    }
+
+    XmlDocument *xml = [XmlDocument xmlWithData:data];
+    if( !xml ) {
+        NSLog(@"failed to load xml");
+        return;
+    }
+
+    NSArray *results = [xml xpathQuery:@"//root/item"];
+    if( results ) {
+        NSLog(@"xpath failed");
+        return;
+    }
+
+    for( XmlNode *node in results ) {
+        NSLog(@"node : %@", node.name);
+        for( XmlNode *child in node.childNodes ) {
+            NSLog(@"child: %@",child.name);
         }
+        NSDictionary *attributes = node.attributes;
+        for( NSString *attr in attributes ) {
+            NSLog(@"attr: %@=%@",attr,[attributes objectForKey:attr]);
+        }
+        PWItem *item = [PWItem new];
+        item.title = [self getStringFromDictionary:attributes forKey:@"title"];
+        item.login = [self getStringFromDictionary:attributes forKey:@"login"];
+        item.password = [self getStringFromDictionary:attributes forKey:@"password"];
+        item.url = [self getStringFromDictionary:attributes forKey:@"url"];
+        item.email = [self getStringFromDictionary:attributes forKey:@"email"];
+        XmlNode *notes = [node childWithName:@"notes"];
+        if( notes && notes.content ) {
+            item.notes = [notes.content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+        [[self getRootData] addObject:item];
+        [item release];
     }
 }
 
@@ -118,6 +129,9 @@
     }
     PWData *decoded = [PWData fromString:text];
     // Do something with this...
+    for( PWItem *item in decoded ) {
+        NSLog(@"Item: %@", item.title );
+    }
 }
 
 -(void)testTextExport
