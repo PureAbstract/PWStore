@@ -26,6 +26,15 @@
 
 #pragma mark -
 #pragma mark Test Functions
+-(NSString *)getStringFromDictionary:(NSDictionary *)dict forKey:(NSString *)key
+{
+    NSObject *obj = [dict objectForKey:key];
+    if( obj && [obj isKindOfClass:[NSString class]] ) {
+        return (NSString *)obj;
+    }
+    return [NSString string];
+}
+
 -(void)testXmlImport
 {
     NSString *import = [UIApplication documentPath:@"import.xml"];
@@ -39,6 +48,25 @@
                 if( results ) {
                     for( XmlNode *node in results ) {
                         NSLog(@"node : %@", node.name);
+                        for( XmlNode *child in node.childNodes ) {
+                            NSLog(@"child: %@",child.name);
+                        }
+                        NSDictionary *attributes = node.attributes;
+                        for( NSString *attr in attributes ) {
+                            NSLog(@"attr: %@=%@",attr,[attributes objectForKey:attr]);
+                        }
+                        PWItem *item = [PWItem new];
+                        item.title = [self getStringFromDictionary:attributes forKey:@"name"];
+                        item.login = [self getStringFromDictionary:attributes forKey:@"user"];
+                        item.password = [self getStringFromDictionary:attributes forKey:@"pass"];
+                        item.url = [self getStringFromDictionary:attributes forKey:@"url"];
+                        item.email = [self getStringFromDictionary:attributes forKey:@"email"];
+                        XmlNode *notes = [node childWithName:@"notes"];
+                        if( notes && notes.content ) {
+                            item.notes = notes.content;
+                        }
+                        [[self getRootData] addObject:item];
+                        [item release];
                     }
                 }
             }
@@ -52,11 +80,11 @@
     PWData *data = [self getRootData];
     for( PWItem *item in data ) {
         XmlNode *node = [xml.rootNode addChildNode:@"item"];
-        [node addAttribute:@"title" value:item.title];
-        [node addAttribute:@"login" value:item.login];
-        [node addAttribute:@"password" value:item.password];
-        [node addAttribute:@"url" value:item.url];
-        [node addAttribute:@"email" value:item.email];
+        [node setAttribute:@"title" value:item.title];
+        [node setAttribute:@"login" value:item.login];
+        [node setAttribute:@"password" value:item.password];
+        [node setAttribute:@"url" value:item.url];
+        [node setAttribute:@"email" value:item.email];
         [node addChildNode:@"notes"
                    content:item.notes];
     }

@@ -16,11 +16,12 @@
 
 -(NSArray *)childNodes;
 -(NSDictionary *)attributes;
+-(XmlNode *)childWithName:(NSString *)name;
 
 -(XmlNode *)addChildNode:(NSString *)name;
 -(XmlNode *)addChildNode:(NSString *)name content:(NSString *)content;
 
--(void)addAttribute:(NSString *)name value:(NSString *)value;
+-(void)setAttribute:(NSString *)name value:(NSString *)value;
 @end
 
 @interface XmlWrapper : NSObject {

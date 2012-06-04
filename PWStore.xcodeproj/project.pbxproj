@@ -131,13 +131,12 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E3C9125E157D3C710055AAD6 /* Xml Parser */,
 				E35958EF157A582D005FDA20 /* User Interface */,
 				E35958EE157A581D005FDA20 /* App Delegate */,
 				E35958ED157A5807005FDA20 /* Categories */,
 				E35958EC157A57F6005FDA20 /* Data Model */,
 				E35958EB157A57E7005FDA20 /* Table View Cells */,
-				E3995280157CEAD7001CE6D3 /* XmlWrapper.h */,
-				E3995281157CEAD7001CE6D3 /* XmlWrapper.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -292,6 +291,15 @@
 				E384E7CF15792C0100A90DDA /* ItemEditViewController.xib */,
 			);
 			name = "User Interface";
+			sourceTree = "<group>";
+		};
+		E3C9125E157D3C710055AAD6 /* Xml Parser */ = {
+			isa = PBXGroup;
+			children = (
+				E3995280157CEAD7001CE6D3 /* XmlWrapper.h */,
+				E3995281157CEAD7001CE6D3 /* XmlWrapper.m */,
+			);
+			name = "Xml Parser";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

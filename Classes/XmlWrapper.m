@@ -155,9 +155,9 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     return [self addChildNode:name content:nil];
 }
 
--(void)addAttribute:(NSString *)name value:(NSString *)value
+-(void)setAttribute:(NSString *)name value:(NSString *)value
 {
-    xmlNewProp( self.nodePtr,
+    xmlSetProp( self.nodePtr,
                 xmlStringFromString( name ),
                 value ? xmlStringFromString( value ) : NULL );
 }
