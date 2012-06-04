@@ -14,6 +14,8 @@ enum {
     kRowFtpDownload,
     kRowXmlImport,
     kRowXmlExport,
+    kRowTextExport,
+    kRowTextImport,
     kRowCount,
 };
 
@@ -115,6 +117,12 @@ enum {
     case kRowFtpUpload:
         cell.textLabel.text = NSLocalizedString(@"FTP Upload",nil);
         break;
+    case kRowTextExport:
+        cell.textLabel.text = NSLocalizedString(@"Text Export",nil);
+        break;
+    case kRowTextImport:
+        cell.textLabel.text = NSLocalizedString(@"Text Import",nil);
+        break;
     default:
         cell.textLabel.text = [NSString stringWithFormat:@"%@",indexPath];
         break;
@@ -183,6 +191,12 @@ enum {
             break;
         case kRowXmlExport:
             [self testXmlExport];
+            break;
+        case kRowTextImport:
+            [self testTextImport];
+            break;
+        case kRowTextExport:
+            [self testTextExport];
             break;
         }
     }

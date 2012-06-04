@@ -14,4 +14,6 @@
 -(PWData *)getRootData;
 -(void)testXmlImport;
 -(void)testXmlExport;
+-(void)testTextImport;
+-(void)testTextExport;
 @end

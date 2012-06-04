@@ -11,7 +11,7 @@
 #import "UIApplication+Utility.h"
 #import "XmlDocument.h"
 #import "PWStoreAppDelegate.h"
-
+#import "PWData+StringExport.h"
 
 @implementation SyncViewController (TestDriver)
 -(PWData *)getRootData
@@ -98,5 +98,40 @@
         NSLog(@"Save failed");
     }
     [xml release];
+}
+
+-(void)testTextImport
+{
+    NSString *filename = [UIApplication documentPath:@"import.txt"];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:filename] ) {
+        NSLog(@"File not found : %@",filename);
+        return;
+    }
+    NSStringEncoding encoding = NSUTF8StringEncoding;
+    NSError *error = nil;
+    NSString *text = [NSString stringWithContentsOfFile:filename
+                                           usedEncoding:&encoding
+                                                  error:&error];
+    if( !text || error ) {
+        NSLog(@"stringWithContentsOfFile failed");
+        return;
+    }
+    PWData *decoded = [PWData fromString:text];
+    // Do something with this...
+}
+
+-(void)testTextExport
+{
+    NSString *filename = [UIApplication documentPath:@"export.txt"];
+    PWData *data = [self getRootData];
+    NSString *text = [data asString];
+    NSError *error = nil;
+    BOOL ok = [text writeToFile:filename
+                     atomically:YES
+                       encoding:NSUTF8StringEncoding
+                          error:&error];
+    if( !ok || error ) {
+        NSLog(@"Save error");
+    }
 }
 @end
