@@ -11,6 +11,8 @@
 enum {
     kRowFtpUpload,
     kRowFtpDownload,
+    kRowXmlImport,
+    kRowXmlExport,
     kRowCount,
 };
 
@@ -100,6 +102,12 @@ enum {
 
     // Configure the cell...
     switch( indexPath.row ) {
+    case kRowXmlImport:
+        cell.textLabel.text = NSLocalizedString(@"Xml Import",nil);
+        break;
+    case kRowXmlExport:
+        cell.textLabel.text = NSLocalizedString(@"Xml Export",nil);
+        break;
     case kRowFtpDownload:
         cell.textLabel.text = NSLocalizedString(@"FTP Download",nil);
         break;
