@@ -13,6 +13,24 @@
 #import "PWStoreAppDelegate.h"
 #import "PWData+StringExport.h"
 
+@interface SyncViewController (ErrorReporting)
+-(void)reportError:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+@end
+
+@implementation SyncViewController (ErrorReporting)
+-(void)reportError:(NSString *)format,...
+{
+    va_list args;
+    va_start(args,format);
+    NSString *str = [[[NSString alloc] initWithFormat:format arguments:args] autorelease];
+    va_end(args);
+    NSLog(@"%@",str);
+    // TODO: Display an error...
+}
+
+@end
+
+
 @implementation SyncViewController (TestDriver)
 -(PWData *)getRootData
 {
@@ -39,28 +57,29 @@
 {
     NSString *import = [UIApplication documentPath:@"import.xml"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:import] ) {
-        NSLog(@"file not found %@",import);
+        [self reportError:@"file not found %@",import];
         return;
     }
 
     NSData *data = [NSData dataWithContentsOfFile:import];
     if( !data ) {
-        NSLog(@"dataWithContentsOfFile failed");
+        [self reportError:@"dataWithContentsOfFile failed"];
         return;
     }
 
     XmlDocument *xml = [XmlDocument xmlWithData:data];
     if( !xml ) {
-        NSLog(@"failed to load xml");
+        [self reportError:@"failed to load xml"];
         return;
     }
 
     NSArray *results = [xml xpathQuery:@"//root/item"];
     if( results ) {
-        NSLog(@"xpath failed");
+        [self reportError:@"xpath failed"];
         return;
     }
 
+    PWData *root = [self getRootData];
     for( XmlNode *node in results ) {
         NSLog(@"node : %@", node.name);
         for( XmlNode *child in node.childNodes ) {
@@ -80,7 +99,7 @@
         if( notes && notes.content ) {
             item.notes = [notes.content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
-        [[self getRootData] addObject:item];
+        [root addObject:item];
         [item release];
     }
 }
@@ -106,7 +125,7 @@
                       encoding:NSUTF8StringEncoding
                          error:&error];
     if( !ok || error ) {
-        NSLog(@"Save failed");
+        [self reportError:@"Save failed %@",error];
     }
     [xml release];
 }
@@ -115,7 +134,7 @@
 {
     NSString *filename = [UIApplication documentPath:@"import.txt"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:filename] ) {
-        NSLog(@"File not found : %@",filename);
+        [self reportError:@"File not found : %@",filename];
         return;
     }
     NSStringEncoding encoding = NSUTF8StringEncoding;
@@ -124,7 +143,7 @@
                                            usedEncoding:&encoding
                                                   error:&error];
     if( !text || error ) {
-        NSLog(@"stringWithContentsOfFile failed");
+        [self reportError:@"stringWithContentsOfFile failed %@",error];
         return;
     }
     PWData *decoded = [PWData fromString:text];
@@ -145,7 +164,7 @@
                        encoding:NSUTF8StringEncoding
                           error:&error];
     if( !ok || error ) {
-        NSLog(@"Save error");
+        [self reportError:@"writeToFile failed %@",error];
     }
 }
 @end
