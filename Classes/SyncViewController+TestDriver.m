@@ -74,7 +74,7 @@
     }
 
     NSArray *results = [xml xpathQuery:@"//root/item"];
-    if( results ) {
+    if( !results ) {
         [self reportError:@"xpath failed"];
         return;
     }
