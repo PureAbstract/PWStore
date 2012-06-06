@@ -13,18 +13,33 @@
 
 #pragma mark -
 #pragma mark Utility Functions
-static NSString *stringFromXmlString( const xmlChar *p ) {
-    if( p ) {
-        return [NSString stringWithUTF8String:(const char *)p];
+
+#pragma mark -
+#pragma mark NSString (Xml) category
+// Includes a couple of functions for moving between Xml & NSString
+@interface NSString (Xml)
++(NSString *)stringWithXmlString:(const xmlChar *)xmlstr;
+-(const xmlChar *)xmlString;
+@end
+
+@implementation NSString (Xml)
++(NSString *)stringWithXmlString:(const xmlChar *)xmlstr
+{
+    if( xmlstr ) {
+        return [self stringWithUTF8String:(const char *)xmlstr];
     } else {
-        return [NSString string];
+        return [self string];
     }
 }
 
-static const xmlChar *xmlStringFromString( NSString *s ) {
-    return (const xmlChar *)[s UTF8String];
+-(const xmlChar *)xmlString
+{
+    return (const xmlChar *)[self UTF8String];
 }
+@end
 
+#pragma mark -
+#pragma mark List Traversal
 typedef void (^nodeTraversal)( xmlNodePtr node, BOOL *stop );
 static void traverseNodeList( xmlNodePtr node, nodeTraversal func )
 {
@@ -45,15 +60,16 @@ static void traverseAttrList( xmlAttrPtr attr, attrTraversal func )
     }
 }
 
-
+#pragma mark -
+#pragma mark Turn an attribute list into a dictionary
 static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     traverseAttrList( attribute, ^(xmlAttrPtr attr, BOOL *stop) {
-            NSString *name = stringFromXmlString( attr->name );
+            NSString *name = [NSString stringWithXmlString:attr->name];
             NSString *value = nil;
             xmlNodePtr p = attr->children;
             if( p && p->content ) {
-                value = stringFromXmlString( p->content );
+                value = [NSString stringWithXmlString:p->content];
             }
             if( !value ) {
                 value = [NSString string];
@@ -63,6 +79,8 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     return dict;
 }
 
+#pragma mark -
+#pragma mark XmlNode internals
 @interface XmlNode ()
 @property (readonly) xmlNodePtr nodePtr;
 @end
@@ -94,7 +112,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 -(NSString *)name
 {
-    return stringFromXmlString( self.nodePtr->name );
+    return [NSString stringWithXmlString:self.nodePtr->name];
 }
 
 -(NSDictionary *)attributes
@@ -104,13 +122,15 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 -(NSString *)content
 {
-    return self.nodePtr->content ? stringFromXmlString( self.nodePtr->content ) : nil;
+    return self.nodePtr->content
+        ? [NSString stringWithXmlString:self.nodePtr->content]
+        : nil;
 }
 
 -(void)setContent:(NSString *)content
 {
     xmlNodeSetContent( self.nodePtr,
-                       content ? xmlStringFromString( content ) : NULL );
+                       content ? [content xmlString] : NULL );
 }
 
 -(NSArray *)childNodes
@@ -128,9 +148,18 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 #pragma mark Methods
 -(XmlNode *)childWithName:(NSString *)name
 {
-    for( XmlNode *node in self.childNodes ) {
-        if( [name isEqualToString:node.name] ) {
-            return node;
+    xmlNodePtr me = self.nodePtr;
+    if( me ) {
+        __block xmlNodePtr result = NULL;
+        const xmlChar *xname = [name xmlString];
+        traverseNodeList( me->children, ^(xmlNodePtr child, BOOL *stop ) {
+                if( strcmp( (const char *)xname, (const char *)child->name) == 0 ) {
+                    result = child;
+                    *stop = YES;
+                }
+            } );
+        if( result ) {
+            return [XmlNode nodeForNode:result];
         }
     }
     return nil;
@@ -140,8 +169,8 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 {
     xmlNodePtr node = xmlNewChild( self.nodePtr,
                                    NULL,
-                                   xmlStringFromString( name ),
-                                   content ? xmlStringFromString( content ) : NULL
+                                   [name xmlString],
+                                   content ? [content xmlString] : NULL
                                    );
     if( node ) {
         return [XmlNode nodeForNode:node];
@@ -158,8 +187,8 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 -(void)setAttribute:(NSString *)name value:(NSString *)value
 {
     xmlSetProp( self.nodePtr,
-                xmlStringFromString( name ),
-                value ? xmlStringFromString( value ) : NULL );
+                [name xmlString],
+                value ? [value xmlString] : NULL );
 }
 @end
 
@@ -250,7 +279,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
         return nil;
     }
 
-    xmlXPathObjectPtr xobj = xmlXPathEvalExpression( xmlStringFromString( xpath ),
+    xmlXPathObjectPtr xobj = xmlXPathEvalExpression( [xpath xmlString],
                                                      context );
     if( !xobj ) {
         NSLog(@"Unable to evaluate query");
@@ -277,11 +306,10 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 #pragma mark Write to String
 -(NSString *)toString
 {
-    NSString *result = nil;
     xmlChar *buf = NULL;
     int size = 0;
     xmlDocDumpFormatMemory( self.docPtr, &buf, &size, 0 );
-    result = stringFromXmlString( buf );
+    NSString *result = [NSString stringWithXmlString:buf];
     xmlFree( buf );
     return result;
 }
