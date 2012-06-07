@@ -46,10 +46,15 @@
 @property (readonly) XmlNode *rootNode;
 // Creata a document with a root node called 'root'
 -(id)init;
+// Creata a document with the specified root node name
+-(id)initWithRoot:(NSString *)name;
+
 // Parse the data as XML
 -(id)initWithData:(NSData *)data;
 +(id)xmlWithData:(NSData *)data;
-
+// Parse a string as XML
+-(id)initWithXml:(NSString *)xml;
++(id)xmlWithXml:(NSString *)xml;
 // Return an array of XmlNodes fulfilling the supplied xpath query
 -(NSArray *)xpathQuery:(NSString *)xpath;
 // Return the document as an Xml string

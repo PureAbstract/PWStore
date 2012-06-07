@@ -18,8 +18,12 @@
 #pragma mark NSString (Xml) category
 // Includes a couple of functions for moving between Xml & NSString
 @interface NSString (Xml)
+// Convert a null-terminated 'xmlChar' string to NSString
 +(NSString *)stringWithXmlString:(const xmlChar *)xmlstr;
+// Convert an NSString to a null-terminated 'xmlChar' string
 -(const xmlChar *)xmlString;
+// Convert an NSString to a Data object suitable for libxml
+-(NSData *)xmlData;
 @end
 
 @implementation NSString (Xml)
@@ -32,10 +36,17 @@
     }
 }
 
+// Just a convenience wrapper for UTF8String
 -(const xmlChar *)xmlString
 {
     return (const xmlChar *)[self UTF8String];
 }
+
+-(NSData *)xmlData
+{
+    return [self dataUsingEncoding:NSUTF8StringEncoding];
+}
+
 @end
 
 #pragma mark -
@@ -68,8 +79,11 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
             NSString *name = [NSString stringWithXmlString:attr->name];
             NSString *value = nil;
             xmlNodePtr p = attr->children;
-            if( p && p->content ) {
-                value = [NSString stringWithXmlString:p->content];
+            if( p ) {
+                const xmlChar *content = XML_GET_CONTENT(p);
+                if( content ) {
+                    value = [NSString stringWithXmlString:content];
+                }
             }
             if( !value ) {
                 value = [NSString string];
@@ -122,8 +136,9 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 -(NSString *)content
 {
-    return self.nodePtr->content
-        ? [NSString stringWithXmlString:self.nodePtr->content]
+    const xmlChar *content = XML_GET_CONTENT( self.nodePtr );
+    return content
+        ? [NSString stringWithXmlString:content]
         : nil;
 }
 
@@ -190,6 +205,24 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
                 [name xmlString],
                 value ? [value xmlString] : NULL );
 }
+
+-(NSString *)getAttribute:(NSString *)name
+{
+    __block const xmlChar *result = NULL;
+    const xmlChar *xname = [name xmlString];
+    traverseAttrList( self.nodePtr->properties, ^(xmlAttrPtr attr, BOOL *stop ) {
+            if( !strcmp( (const char *)xname, (const char *)attr->name ) ) {
+                xmlNodePtr pval = attr->children;
+                if( pval ) {
+                    result = XML_GET_CONTENT(pval);
+                }
+                *stop = YES;
+            }
+        } );
+    return result
+        ? [NSString stringWithXmlString:result]
+        : nil;
+}
 @end
 
 #pragma mark -
@@ -219,23 +252,33 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 -(XmlNode *)rootNode
 {
-    return [XmlNode nodeForNode:self.docPtr->children];
+    return [XmlNode nodeForNode:xmlDocGetRootElement(self.docPtr)];
 }
 
 #pragma mark -
 #pragma mark Initialisation
--(id)init
+-(id)initWithRoot:(NSString *)name
 {
     self = [super init];
     if( self ) {
         xmlDocPtr doc = xmlNewDoc( (xmlChar *)"1.0" );
+        NSAssert( doc, @"Null Doc" );
         docPtr_ = doc;
-        // Hack... stuff in a root node called 'root'
-        xmlNodePtr root = xmlNewNode( NULL, (xmlChar *)"root" );
-        NSAssert( root, @"Null root" );
+        xmlNodePtr root = xmlNewNode( NULL, [name xmlString] );
+        NSAssert( root, @"Null Root" );
         xmlDocSetRootElement( doc, root );
     }
     return self;
+}
+
+-(id)init
+{
+    return [self initWithRoot:@"root"];
+}
+
+-(id)initWithXml:(NSString *)xml
+{
+    return [self initWithData:[xml xmlData]];
 }
 
 -(id)initWithData:(NSData *)data
@@ -260,6 +303,11 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
         NSLog(@"xmlWithData: failed");
     }
     return xml;
+}
+
++(id)xmlWithXml:(NSString *)xml
+{
+    return [self xmlWithData:[xml xmlData]];
 }
 
 
