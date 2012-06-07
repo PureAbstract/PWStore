@@ -5,6 +5,10 @@ An iPhone Password Store.
 
 A very, very simple password storage application for the iPhone.
 
+The code is well crufty; I promise I generally write much neater code.
+
+
+
 Toolbar Icons are part of a very nice set, generously made availble by 
 The Working Group - http://www.theworkinggroup.ca/
 
