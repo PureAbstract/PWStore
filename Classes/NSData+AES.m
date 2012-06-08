@@ -10,6 +10,10 @@
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonDigest.h>
 
+#if !TARGET_OS_IPHONE
+#import "OSX_SecRandom.h"
+#endif
+
 @implementation NSData (AES)
 -(NSMutableData *)sha256
 {
