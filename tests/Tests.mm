@@ -330,3 +330,46 @@ TEST_CASE( "XmlDocument/content", "Set node content" )
 
     [pool release];
 }
+
+TEST_CASE( "NSData+AES/CryptWithSalt", "Test encrypt/decrypt with salt." )
+{
+    const size_t saltSize = 32;
+    const size_t keySize = 32;
+    const size_t dataSize = 1024;
+
+    NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
+    // A random key and data...
+    NSData *key = [NSData randomBytes:keySize];
+    NSData *data = [NSData randomBytes:dataSize];
+
+    // Encrypt
+    NSData *encrypted1 = [data encryptWithKey:key
+                                  saltLength:saltSize];
+    REQUIRE( ![encrypted1 isEqualToData:data] );
+
+    // .. and again
+    NSData *encrypted2 = [data encryptWithKey:key
+                                   saltLength:saltSize];
+    REQUIRE( ![encrypted2 isEqualToData:data] );
+
+    // Now decrypt and verify...
+    NSData *decrypted1 = [encrypted1 decryptWithKey:key
+                                         saltLength:saltSize];
+    REQUIRE( [data isEqualToData:decrypted1] );
+
+    NSData *decrypted2 = [encrypted2 decryptWithKey:key
+                                         saltLength:saltSize];
+    REQUIRE( [data isEqualToData:decrypted2] );
+
+    // Now the important bit - verify that the salt has done its job!
+    // Note that since the salt is random, both salts might be the
+    // same, which would result in the encrypted blocks being the
+    // same.
+
+    // Possible, but highly improbable (depending on how good a source
+    // of entropy SecRandomCopyBytes is)
+    REQUIRE( ![encrypted1 isEqualToData:encrypted2] );
+
+    [pool release];
+}
