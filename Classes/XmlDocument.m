@@ -136,10 +136,13 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
 
 -(NSString *)content
 {
-    const xmlChar *content = XML_GET_CONTENT( self.nodePtr );
-    return content
-        ? [NSString stringWithXmlString:content]
-        : nil;
+    xmlChar *content = xmlNodeGetContent( self.nodePtr );
+    if( content ) {
+        NSString *rv = [NSString stringWithXmlString:content];
+        xmlFree( content );
+        return rv;
+    }
+    return nil;
 }
 
 -(void)setContent:(NSString *)content
@@ -148,6 +151,8 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
                        content ? [content xmlString] : NULL );
 }
 
+// TODO: Should make this some sort of proxy, rather than a copying
+// collection
 -(NSArray *)childNodes
 {
     NSMutableArray *children = [NSMutableArray array];
@@ -340,7 +345,8 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     if( !nodeSet ) {
         NSLog(@"Empty node set" );
     } else {
-        for( NSInteger i = 0 ; i < nodeSet->nodeNr ; ++i ) {
+        size_t i = 0;
+        for( i = 0 ; i < nodeSet->nodeNr ; ++i ) {
             xmlNodePtr node = nodeSet->nodeTab[i];
             [results addObject:[XmlNode nodeForNode:node]];
         }
