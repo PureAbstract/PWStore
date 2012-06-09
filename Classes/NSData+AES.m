@@ -15,6 +15,9 @@
 #endif
 
 @implementation NSData (AES)
+#pragma mark -
+#pragma mark Random data generator
+// see also 'wipeRandom'
 +(NSMutableData *)randomBytes:(size_t)length
 {
     NSMutableData *bytes = [NSMutableData dataWithLength:length];
@@ -24,18 +27,26 @@
     return bytes;
 }
 
-
+#pragma mark -
+#pragma mark Internal: cryptOperation
 -(NSMutableData *)cryptOperation:(CCOperation) operation
                          withKey:(NSData *)key
+                      initVector:(NSData *)iv // init vector; may be NULL
 {
     if( !key ) {
-        NSAssert( key, @"Null key!");
+        NSAssert( key, @"Null key");
+        return nil;
+    }
+    // Null init vector is ok
+    if( iv && ( iv.length != kCCBlockSizeAES128 ) ) {
+        NSLog(@"Init Vector too short (have %d, need %d)",iv.length,kCCBlockSizeAES128);
         return nil;
     }
     if( key.length != kCCKeySizeAES256 ) {
         // Key the wrong size, go hash with SHA256...
         key = [key sha256];
     }
+    // This should never fail...
     NSAssert( key.length == kCCKeySizeAES256, @"Bad key size" );
     if( key.length != kCCKeySizeAES256 ) {
         return nil;
@@ -47,15 +58,13 @@
     // isn't really a big deal.
     NSUInteger outputLen = (1+self.length/kCCBlockSizeAES128)*kCCBlockSizeAES128;
     NSMutableData *result = [NSMutableData dataWithLength:outputLen];
-    // Init vector - just use zero
-    NSData *iv = [NSMutableData dataWithLength:kCCBlockSizeAES128];
     size_t dataOut = 0;
     CCCryptorStatus status = CCCrypt( operation,
                                       kCCAlgorithmAES128,
                                       kCCOptionPKCS7Padding,
                                       key.bytes,
                                       key.length,
-                                      iv.bytes,
+                                      ( iv ? iv.bytes : NULL ),
                                       self.bytes,
                                       self.length,
                                       result.mutableBytes,
@@ -65,24 +74,31 @@
         NSLog(@"CCCrypt error %d",status);
         result = nil;
     } else {
+        NSAssert( dataOut <= result.length, @"Result buffer too short" );
         NSLog(@"CCCrypt : Allocated %d, Output was %d@", result.length, dataOut );
         result.length = dataOut;
     }
     return result;
 }
 
+#pragma mark -
+#pragma mark encrypt/decrypt data with key
 -(NSMutableData *)encryptWithKey:(NSData *)key
 {
     return [self cryptOperation:kCCEncrypt
-                        withKey:key];
+                        withKey:key
+                     initVector:nil];
 }
 
 -(NSMutableData *)decryptWithKey:(NSData *)key
 {
     return [self cryptOperation:kCCDecrypt
-                        withKey:key];
+                        withKey:key
+                     initVector:nil];
 }
 
+#pragma mark -
+#pragma mark encrypt/decrypt data with key and salt
 // Append some random salt, and then encrypt with key
 // Note: We append rather than prepend, primarily so when we decrypt
 // we can remve the salt by simple truncation, rather than by copying.
@@ -131,12 +147,17 @@
 @end
 
 @implementation NSMutableData (AES)
+#pragma mark -
+#pragma mark Zero fill data
 -(void)wipeZero
 {
     if( self.length ) {
         bzero( self.mutableBytes, self.length );
     }
 }
+
+#pragma mark -
+#pragma mark Random fill data
 -(void)wipeRandom
 {
     if( self.length ) {
