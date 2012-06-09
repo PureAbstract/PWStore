@@ -16,6 +16,7 @@ BINDIR=$(BUILDDIR)/bin
 OBJDIR=$(BUILDDIR)/obj
 DIRS = $(BUILDDIR) $(BINDIR) $(OBJDIR)
 
+## Search Paths
 vpath %.m  $(SOURCE_DIRS)
 vpath %.mm $(SOURCE_DIRS)
 vpath %.h  $(SOURCE_DIRS)
@@ -23,13 +24,13 @@ vpath %.o  $(OBJDIR)
 
 OCFLAGS= -Wextra -Wall
 ## Rules
-MMFRAMEWORKS=$(foreach framework,$(FRAMEWORKS),-framework $(framework))
-INCLUDES=$(foreach include,$(INCLUDE_DIRS),-I $(include))
-LIBRARIES=$(foreach lib,$(LIBS),-l$(lib))
-COMPILE.objc   = gcc $(OCFLAGS) $(INCLUDES) -x objective-c -c -o $@ $<
-COMPILE.objcxx = gcc $(OCFLAGS) $(INCLUDES) -x objective-c++ -c -o $@ $<
-LINK.objc   = gcc $(MMFRAMEWORKS)
-LINK.objcxx = $(LINK.objc) $(LIBRARIES) -o $@ $^
+OCFRAMEWORKS=$(foreach framework,$(FRAMEWORKS),-framework $(framework))
+OCINCLUDES=$(foreach include,$(INCLUDE_DIRS),-I $(include))
+OCLIBS=$(foreach lib,$(LIBS),-l$(lib))
+COMPILE.objc   = gcc $(OCFLAGS) $(OCINCLUDES) -x objective-c -c -o $@ $<
+COMPILE.objcxx = gcc $(OCFLAGS) $(OCINCLUDES) -x objective-c++ -c -o $@ $<
+LINK.objc   = gcc $(OCFRAMEWORKS)
+LINK.objcxx = $(LINK.objc) $(OCLIBS) -o $@ $^
 
 $(OBJDIR)/%.o: %.mm
 	$(COMPILE.objcxx)
