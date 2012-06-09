@@ -76,6 +76,7 @@ static void traverseAttrList( xmlAttrPtr attr, attrTraversal func )
 static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     traverseAttrList( attribute, ^(xmlAttrPtr attr, BOOL *stop) {
+#pragma unused(stop)
             NSString *name = [NSString stringWithXmlString:attr->name];
             NSString *value = nil;
             xmlNodePtr p = attr->children;
@@ -158,6 +159,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     NSMutableArray *children = [NSMutableArray array];
 
     traverseNodeList( self.nodePtr->children, ^( xmlNodePtr child, BOOL *stop ) {
+#pragma unused(stop)
             [children addObject:[XmlNode nodeForNode:child]];
         });
 
@@ -345,7 +347,7 @@ static NSMutableDictionary *dictionaryFromAttributes( xmlAttrPtr attribute ) {
     if( !nodeSet ) {
         NSLog(@"Empty node set" );
     } else {
-        size_t i = 0;
+        int i = 0;
         for( i = 0 ; i < nodeSet->nodeNr ; ++i ) {
             xmlNodePtr node = nodeSet->nodeTab[i];
             [results addObject:[XmlNode nodeForNode:node]];

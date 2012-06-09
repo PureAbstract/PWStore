@@ -9,6 +9,7 @@ const SecRandomRef kSecRandomDefault = NULL;
 
 int SecRandomCopyBytes( SecRandomRef rnd, size_t count, uint8_t *bytes )
 {
+#pragma unused(rnd)
     if( count == 0 )
         return 0;
 
@@ -17,7 +18,7 @@ int SecRandomCopyBytes( SecRandomRef rnd, size_t count, uint8_t *bytes )
         return -1;
     }
   
-    size_t bytesRead;
+    ssize_t bytesRead;
     uint8_t *p = bytes;
   
     do {
