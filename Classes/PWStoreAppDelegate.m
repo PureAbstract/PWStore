@@ -13,6 +13,7 @@
 #import "SyncViewController.h"
 #import "PWItem.h"
 #import "NSData+AES.h"
+#import "NSData+CryptoHash.h"
 #import "UIApplication+Utility.h"
 #import "NSString+Utility.h"
 #import "UIViewController+TabBarItem.h"

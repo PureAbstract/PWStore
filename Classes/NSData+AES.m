@@ -7,28 +7,14 @@
 //
 
 #import "NSData+AES.h"
+#import "NSData+CryptoHash.h"
 #import <CommonCrypto/CommonCryptor.h>
-#import <CommonCrypto/CommonDigest.h>
 
 #if !TARGET_OS_IPHONE
 #import "OSX_SecRandom.h"
 #endif
 
 @implementation NSData (AES)
--(NSMutableData *)sha256
-{
-    NSMutableData *hash = [NSMutableData dataWithLength:CC_SHA256_DIGEST_LENGTH];
-    CC_SHA256( self.bytes, self.length, hash.mutableBytes );
-    return hash;
-}
-
--(NSMutableData *)sha1
-{
-    NSMutableData *hash = [NSMutableData dataWithLength:CC_SHA1_DIGEST_LENGTH];
-    CC_SHA1( self.bytes, self.length, hash.mutableBytes );
-    return hash;
-}
-
 +(NSMutableData *)randomBytes:(size_t)length
 {
     NSMutableData *bytes = [NSMutableData dataWithLength:length];
@@ -42,13 +28,18 @@
 -(NSMutableData *)cryptOperation:(CCOperation) operation
                          withKey:(NSData *)key
 {
-    NSAssert( key, @"Null key!");
+    if( !key ) {
+        NSAssert( key, @"Null key!");
+        return nil;
+    }
     if( key.length != kCCKeySizeAES256 ) {
         // Key the wrong size, go hash with SHA256...
-        NSAssert( CC_SHA256_DIGEST_LENGTH == kCCKeySizeAES256, @"This is odd...");
         key = [key sha256];
     }
     NSAssert( key.length == kCCKeySizeAES256, @"Bad key size" );
+    if( key.length != kCCKeySizeAES256 ) {
+        return nil;
+    }
 
     // Calculate the required output buffer size.
     // This may be slightly pessimistic, but AFAICT, the worst case is

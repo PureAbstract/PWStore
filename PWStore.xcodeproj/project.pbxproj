@@ -43,6 +43,7 @@
 		E3995065157AB505001CE6D3 /* PWData+StringExport.m in Sources */ = {isa = PBXBuildFile; fileRef = E3995064157AB505001CE6D3 /* PWData+StringExport.m */; };
 		E3995284157CEAE7001CE6D3 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E3995283157CEAE7001CE6D3 /* libxml2.dylib */; };
 		E39AA44D1582928B00A93BCE /* OSX_SecRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = E39AA44C1582928B00A93BCE /* OSX_SecRandom.m */; };
+		E3A39DAD158370DD006754C5 /* NSData+CryptoHash.m in Sources */ = {isa = PBXBuildFile; fileRef = E3A39DAC158370DD006754C5 /* NSData+CryptoHash.m */; };
 		E3C91235157D3ACC0055AAD6 /* SyncViewController+TestDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C91234157D3ACC0055AAD6 /* SyncViewController+TestDriver.m */; };
 		E3C912F6157D4A040055AAD6 /* XmlDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = E3C912F5157D4A040055AAD6 /* XmlDocument.m */; };
 /* End PBXBuildFile section */
@@ -109,6 +110,8 @@
 		E3995283157CEAE7001CE6D3 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E39AA44B1582928B00A93BCE /* OSX_SecRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSX_SecRandom.h; path = OSX_Support/OSX_SecRandom.h; sourceTree = "<group>"; };
 		E39AA44C1582928B00A93BCE /* OSX_SecRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OSX_SecRandom.m; path = OSX_Support/OSX_SecRandom.m; sourceTree = "<group>"; };
+		E3A39DAB158370DD006754C5 /* NSData+CryptoHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CryptoHash.h"; sourceTree = "<group>"; };
+		E3A39DAC158370DD006754C5 /* NSData+CryptoHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CryptoHash.m"; sourceTree = "<group>"; };
 		E3C91233157D3ACC0055AAD6 /* SyncViewController+TestDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SyncViewController+TestDriver.h"; sourceTree = "<group>"; };
 		E3C91234157D3ACC0055AAD6 /* SyncViewController+TestDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SyncViewController+TestDriver.m"; sourceTree = "<group>"; };
 		E3C912F4157D4A040055AAD6 /* XmlDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlDocument.h; sourceTree = "<group>"; };
@@ -227,6 +230,8 @@
 		E35958ED157A5807005FDA20 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				E3A39DAB158370DD006754C5 /* NSData+CryptoHash.h */,
+				E3A39DAC158370DD006754C5 /* NSData+CryptoHash.m */,
 				E38E44FC1575518C00FB0AF6 /* NSData+AES.h */,
 				E38E44FD1575518C00FB0AF6 /* NSData+AES.m */,
 				E384DD69157582C400A90DDA /* NSCoder+withDefaults.h */,
@@ -408,6 +413,7 @@
 				E3C91235157D3ACC0055AAD6 /* SyncViewController+TestDriver.m in Sources */,
 				E3C912F6157D4A040055AAD6 /* XmlDocument.m in Sources */,
 				E39AA44D1582928B00A93BCE /* OSX_SecRandom.m in Sources */,
+				E3A39DAD158370DD006754C5 /* NSData+CryptoHash.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

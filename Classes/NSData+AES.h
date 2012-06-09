@@ -13,10 +13,6 @@
 //
 // Note that all these funtions return NSMutableData (vs NSData).
 // This is primarily so they can be wiped after use if necessary
-// The first few aren't really AES...
--(NSMutableData *)sha256;
--(NSMutableData *)sha1;
-// Generate some random bytes
 +(NSMutableData *)randomBytes:(size_t)length;
 
 // These are though
